@@ -1,0 +1,4 @@
+*.oso
+*.pyc
+.DS_Store
+
