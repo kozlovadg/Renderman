@@ -35,9 +35,12 @@ def main(filename,
   #######################################################################
   ri.WorldBegin()
 
-  #######################################################################
-  #Lighting Begin
-  #######################################################################
+  ri.Translate(0,0,3)
+  ri.Rotate(-30,1,0,0)
+
+  ###
+  # Lighting Begin
+  ###
   ri.TransformBegin()
   ri.Rotate(-90,1,0,0)
   ri.Rotate(180,0,0,1)
@@ -45,9 +48,43 @@ def main(filename,
             'string lightColorMap'  : 'vatican_road_2k.tx'
    })
   ri.TransformEnd()
-  #######################################################################
+  ###
   # Lighting End
-  #######################################################################
+  ###
+
+
+  ###
+  # Model Part 1 Begin
+  ###
+  ri.AttributeBegin()
+  ri.Attribute( 'user' , {'string __materialid' : ['metal'] })
+  ri.Bxdf ('PxrSurface' , 'metal', 
+  {
+      'float diffuseGain' : [0.8],
+      'int specularFresnelMode' : [1], 
+      'color specularFaceColor' : [1,1,1], 
+      'color specularEdgeColor' : [1,1,1],
+      'color roughSpecularIor' : [2.5,2.5,2.5],
+      'color specularExtinctionCoeff' : [0.1, 0.1, 0.1],
+      'float specularRoughness' : [0.01], 
+      'integer specularModelType' : [1], 
+      'string __materialid' : ['metal']
+  })
+  ri.TransformBegin()
+  widthBig = 1.25
+  widthSmall = 1.1
+  hight = 0.5
+  ri.Rotate(90,1,0,0)
+  ri.Hyperboloid([ 1.0,0.0,-0.075],[1.1,0.0,-0.1],360)
+  ri.Hyperboloid([widthSmall,0.0,-0.1], [widthBig,0.0,0.0],360)
+  ri.Translate(0.0, 0.0, hight/2)
+  ri.Hyperboloid([widthBig,0.0,-hight/2], [widthBig,0.0,hight/2],360)
+  ri.TransformEnd()
+  ri.AttributeEnd()
+  ###
+  # Model Part 1 End
+  ###
+
 
   ri.WorldEnd()
   #######################################################################
