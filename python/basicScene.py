@@ -32,7 +32,7 @@ def main(filename,
 
   ri.Projection(ri.PERSPECTIVE,{ri.FOV:fov})
 
-  ri.Translate(0,0,3)
+  ri.Translate(0,0.25,3)
   ri.Rotate(-30,1,0,0)
 
   #######################################################################
@@ -58,29 +58,8 @@ def main(filename,
   ###
   # Model Part 1 Begin
   ###
-  ri.AttributeBegin()
-  ri.Attribute( 'user' , {'string __materialid' : ['metal'] })
-  ri.Attribute( 'Ri', {'int Sides' : [2] })
-  ri.Bxdf('PxrSurface', 'metal', {
-          'float diffuseGain' : [0],
-          'int specularFresnelMode' : [1],
-          'color specularEdgeColor' : [1 ,1 ,1],
-          'color specularIor' : [4.3696842, 2.916713, 1.654698],
-          'color specularExtinctionCoeff' : [5.20643, 4.2313662, 3.7549689],
-          'float specularRoughness' : [0.1], 
-          'integer specularModelType' : [1] ,
-          'string __materialid' : ['metal']
-  })
-  """ri.Bxdf('PxrDisney','metal',
-  {
-    'color baseColor' : [.25,.25,.25], 
-    'float metallic' : [1], 
-    'float specular' : [1], 
-    'float roughness' : [0.2], 
-    'string __materialid' : ['metal']
-  })"""
   ri.TransformBegin()
-  widthBig = 1.25
+  widthBig = 1.2
   widthSmall = 1.1
   hight = 0.5
   ri.Rotate(90,1,0,0)
@@ -100,23 +79,73 @@ def main(filename,
     'float glassRoughness' : [0.01],
     'float glassIor' : [1.5],
   })
-  ri.Disk(-0.125,1.05,360)
-  ri.Hyperboloid([ 1.05,0.0,-0.075],[1.05,0.0,-0.125],360)
-  ri.TransformBegin()
-  ri.Translate(0,0,-0.2)
-  ri.Rotate(-90,1,0,0)
-  ri.Scale(0.1,0.1,0.1)
-  ri.ReadArchive('buddha.rib')
-  ri.TransformEnd()
+  ri.ReadArchive('cylinder.rib')
   ri.AttributeEnd()
-  # ------------- Metal -------------
-  ri.Hyperboloid([ 1.05,0.0,-0.075],[1.1,0.0,-0.1],360)
-  ri.Hyperboloid([widthSmall,0.0,-0.1], [widthBig,0.0,0.0],360)
-  ri.Translate(0.0, 0.0, hight/2)
+  # ------------- Metal In -------------
+  diskPosition = 0.15
+  ri.AttributeBegin()
+  ri.Attribute( 'user' , {'string __materialid' : ['metal_in'] })
+  ri.Attribute( 'Ri', {'int Sides' : [2] })
+  ri.Bxdf('PxrSurface', 'metal_in', {
+          'float diffuseGain' : [0],
+          'int specularFresnelMode' : [1],
+          'color specularEdgeColor' : [1 ,1 ,1],
+          'color specularIor' : [4.3696842, 2.916713, 1.654698],
+          'float specularAnisotropy' : [1.0],
+          'color specularExtinctionCoeff' : [5.20643, 4.2313662, 3.7549689],
+          'float specularRoughness' : [0.5], 
+          'integer specularModelType' : [1] ,
+          'string __materialid' : ['metal_in']
+  })
+  ri.Disk(diskPosition,widthSmall,-360)
+  ri.AttributeEnd()
+  # ------------- Paper In -------------
+  ri.AttributeBegin()
+  ri.Attribute( 'user' , {'string __materialid' : ['metal_in'] })
+  ri.Attribute( 'Ri', {'int Sides' : [2] })
+  ri.Bxdf('PxrDiffuse', 'smooth', { 
+          'color diffuseColor' : [0.8,0.8,0.8]
+  })
+  ri.Disk(diskPosition-0.005,widthSmall-0.5,360)
+  ri.AttributeEnd()
+  # ------------- Plastic In -------------
+  ri.AttributeBegin()
+  ri.Attribute( 'user' , {'string __materialid' : ['metal_in'] })
+  ri.Attribute( 'Ri', {'int Sides' : [2] })
+  ri.Bxdf('PxrDiffuse', 'smooth', { 
+          'color diffuseColor' : [0.8,0.8,0.8]
+  })
+  ri.Hyperboloid([ widthSmall-0.175,0.0,diskPosition],[widthSmall,0.0,diskPosition-0.2],360)
+  ri.AttributeEnd()
+  # ------------- Metal Out -------------
+  ri.AttributeBegin()
+  ri.Attribute( 'user' , {'string __materialid' : ['metal'] })
+  ri.Attribute( 'Ri', {'int Sides' : [2] })
+  """
+  ri.Bxdf('PxrSurface', 'metal', {
+          'float diffuseGain' : [0],
+          'int specularFresnelMode' : [1],
+          'color specularEdgeColor' : [1 ,1 ,1],
+          'color specularIor' : [4.3696842, 2.916713, 1.654698],
+          'color specularExtinctionCoeff' : [5.20643, 4.2313662, 3.7549689],
+          'float specularRoughness' : [0.1], 
+          'integer specularModelType' : [1] ,
+          'string __materialid' : ['metal']
+  })"""
+  ri.Bxdf('PxrDisney','metal',
+  {
+    'color baseColor' : [.25,.25,.25], 
+    'float metallic' : [1], 
+    'float specular' : [1], 
+    'float roughness' : [0.2], 
+    'string __materialid' : ['metal']
+  })
+  ri.Hyperboloid([ widthSmall-0.05,0.0,-0.075],[widthSmall,0.0,-0.1],360)
+  ri.Hyperboloid([widthSmall,0.0,-0.1], [widthBig,0.0,-0.05],360)
+  ri.Translate(0.0, 0.0, hight/2-0.05)
   ri.Hyperboloid([widthBig,0.0,-hight/2], [widthBig,0.0,hight/2],360)
-  #ri.Disk(-hight/2,widthBig,360)
-  ri.TransformEnd()
   ri.AttributeEnd()
+  ri.TransformEnd()
   ###
   # Model Part 1 End
   ###
