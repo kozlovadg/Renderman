@@ -55,9 +55,6 @@ def main(filename,
   ###
 
 
-  ###
-  # Model Part 1 Begin
-  ###
   ri.TransformBegin()
   widthBig = 1.2
   widthSmall = 1.1
@@ -99,6 +96,44 @@ def main(filename,
   })
   ri.Disk(diskPosition,widthSmall,-360)
   ri.AttributeEnd()
+  # ------------- Hands In ------------
+  ri.TransformBegin()
+
+  ri.Translate(0,0,0.225)
+
+  w = 0.9
+  d = 0.15
+  h = 0.03
+  face=[-w,-h+0.02,-d,-w,h-0.02,-d,0.15,-h,-d,0.15,h,-d]
+  ri.TransformBegin()
+  ri.Rotate(25, 0,0,1)
+  ri.Disk(-0.15,-0.07,360)
+  ri.Patch("bilinear",{'P':face})
+  ri.TransformEnd()
+
+  ri.AttributeBegin()
+  ri.Bxdf('PxrDiffuse', 'smooth', { 
+          'color diffuseColor' : [0.001147,0.06711,0.516743]
+  })
+
+  w = 0.9
+  d = 0.125
+  h = 0.03
+  face=[-w,-h,-d,-w,h,-d,0.15,-h,-d,0.15,h,-d]
+  ri.Disk(-0.125,-0.07,360)
+  ri.Patch("bilinear",{'P':face})
+
+  w = 0.65
+  d = 0.1
+  h = 0.03
+  face=[-w,-h,-d,-w,h,-d,0.15,-h,-d,0.15,h,-d]
+  ri.TransformBegin()
+  ri.Rotate(-120, 0,0,1)
+  ri.Disk(-0.1,-0.07,360)
+  ri.Patch("bilinear",{'P':face})
+  ri.TransformEnd()
+  ri.AttributeEnd()
+  ri.TransformEnd()
   # ------------- Paper In -------------
   ri.AttributeBegin()
   ri.Attribute( 'user' , {'string __materialid' : ['metal_in'] })
@@ -143,12 +178,12 @@ def main(filename,
   ri.Hyperboloid([ widthSmall-0.05,0.0,-0.075],[widthSmall,0.0,-0.1],360)
   ri.Hyperboloid([widthSmall,0.0,-0.1], [widthBig,0.0,-0.05],360)
   ri.Translate(0.0, 0.0, hight/2-0.05)
-  ri.Hyperboloid([widthBig,0.0,-hight/2], [widthBig,0.0,hight/2],360)
+  ri.Hyperboloid([widthBig,0.0,-hight/2], [widthBig,0.0,-0.2],360)
+  ri.Hyperboloid([ widthBig,0.0,-0.2],[widthBig + 0.05,0.0,-0.2],360)
+  ri.Hyperboloid([ widthBig + 0.05,0.0,-0.2],[widthBig + 0.05,0.0,-0.225],360)
+  ri.Hyperboloid([ widthBig + 0.05,0.0,-0.225],[widthBig + 0.125,0.0,-0.175],360)
   ri.AttributeEnd()
   ri.TransformEnd()
-  ###
-  # Model Part 1 End
-  ###
 
 
   ri.WorldEnd()
