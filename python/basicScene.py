@@ -34,6 +34,7 @@ def main(filename,
 
   ri.Translate(0,0.25,3)
   ri.Rotate(-30,1,0,0)
+  ri.Rotate(-200,0,1,0)
 
   #######################################################################
   #World Begin
@@ -45,7 +46,7 @@ def main(filename,
   ###
   ri.TransformBegin()
   ri.Rotate(-90,1,0,0)
-  ri.Rotate(180,0,0,1)
+  ri.Rotate(0,0,0,1)
   ri.Light( 'PxrDomeLight', 'domeLight', { 
             'string lightColorMap'  : 'vatican_road_2k.tex'
    })
@@ -95,6 +96,7 @@ def main(filename,
           'string __materialid' : ['metal_in']
   })
   ri.Disk(diskPosition,widthSmall,-360)
+  ri.Hyperboloid([ widthSmall,0.0,diskPosition],[widthSmall,0.0,diskPosition-0.2],360)
   ri.AttributeEnd()
   # ------------- Hands In ------------
   ri.TransformBegin()
@@ -145,12 +147,29 @@ def main(filename,
   ri.AttributeEnd()
   # ------------- Plastic In -------------
   ri.AttributeBegin()
+  ri.TransformBegin()
+  ri.Rotate(-18, 0,0,1)
   ri.Attribute( 'user' , {'string __materialid' : ['metal_in'] })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
   ri.Bxdf('PxrDiffuse', 'smooth', { 
           'color diffuseColor' : [0.8,0.8,0.8]
   })
-  ri.Hyperboloid([ widthSmall-0.175,0.0,diskPosition],[widthSmall,0.0,diskPosition-0.2],360)
+  # right up
+  # left up
+  # rigt down
+  # left down
+  face=[0.285,-1.05,-0.06,0.285,-1.05,-0.06,0.285,-1.05,0.175,0.23,-0.875,0.175]
+  ri.Patch("bilinear",{'P':face})	
+  ri.TransformBegin()
+  ri.Rotate(-30,0,0,1)
+  ri.Patch("bilinear",{'P':face})	
+  ri.TransformEnd()
+
+  ri.TransformBegin()
+  ri.Rotate(-75, 0,0,1)
+  ri.Hyperboloid([ widthSmall-0.175,0.0,diskPosition],[widthSmall,0.0,diskPosition-0.2],330)
+  ri.TransformEnd()
+  ri.TransformEnd()
   ri.AttributeEnd()
   # ------------- Metal Out -------------
   ri.AttributeBegin()
@@ -181,7 +200,11 @@ def main(filename,
   ri.Hyperboloid([widthBig,0.0,-hight/2], [widthBig,0.0,-0.2],360)
   ri.Hyperboloid([ widthBig,0.0,-0.2],[widthBig + 0.05,0.0,-0.2],360)
   ri.Hyperboloid([ widthBig + 0.05,0.0,-0.2],[widthBig + 0.05,0.0,-0.225],360)
-  ri.Hyperboloid([ widthBig + 0.05,0.0,-0.225],[widthBig + 0.125,0.0,-0.175],360)
+  ri.TransformBegin()
+  ri.Rotate(85, 0,0,1)
+  ri.Hyperboloid([ widthBig + 0.05,0.0,-0.225],[widthBig + 0.125,0.0,-0.175],330)
+  ri.Hyperboloid([ widthBig + 0.125,0.0,-0.175],[widthBig + 0.15,0.0,0.125],330)
+  ri.TransformEnd()
   ri.AttributeEnd()
   ri.TransformEnd()
 
