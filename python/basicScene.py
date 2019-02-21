@@ -34,7 +34,7 @@ def main(filename,
 
   ri.Translate(0,0.25,3)
   ri.Rotate(-30,1,0,0)
-  ri.Rotate(-200,0,1,0)
+  ri.Rotate(-230,0,1,0)
 
   #######################################################################
   #World Begin
@@ -77,7 +77,7 @@ def main(filename,
     'float glassRoughness' : [0.01],
     'float glassIor' : [1.5],
   })
-  ri.ReadArchive('cylinder.rib')
+  #ri.ReadArchive('cylinder.rib')
   ri.AttributeEnd()
   # ------------- Metal In -------------
   diskPosition = 0.15
@@ -154,10 +154,7 @@ def main(filename,
   ri.Bxdf('PxrDiffuse', 'smooth', { 
           'color diffuseColor' : [0.8,0.8,0.8]
   })
-  # right up
-  # left up
-  # rigt down
-  # left down
+  # Triangles
   face=[0.285,-1.05,-0.06,0.285,-1.05,-0.06,0.285,-1.05,0.175,0.23,-0.875,0.175]
   ri.Patch("bilinear",{'P':face})	
   ri.TransformBegin()
@@ -200,11 +197,102 @@ def main(filename,
   ri.Hyperboloid([widthBig,0.0,-hight/2], [widthBig,0.0,-0.2],360)
   ri.Hyperboloid([ widthBig,0.0,-0.2],[widthBig + 0.05,0.0,-0.2],360)
   ri.Hyperboloid([ widthBig + 0.05,0.0,-0.2],[widthBig + 0.05,0.0,-0.225],360)
+
+  # Detail 1
+  ri.TransformBegin()
+  ri.Rotate(-5, 0,0,1)
+
+  face=[0.05,1.5,-0.05,
+        0,1.325,-0.175,
+        0.05,1.5,0.085,
+        0,1.35,0.125]	
+  ri.Patch("bilinear",{'P':face})
+
+  face=[0.15,1.5,-0.05,
+        0.15,1.24,-0.22,
+        0.175,1.5,0.085,
+        0.15,1.22,0.125]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[0.175,1.5,-0.05,
+        0.15,1.24,-0.22,
+        0.05,1.5,-0.05,
+        0,1.325,-0.175]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[0.175,1.5,0.085,
+        0.15,1.22,0.125,
+        0.05,1.5,0.085,
+        0,1.35,0.125]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[0.175,1.5,-0.05,
+        0.175,1.5,0.085,
+        0.05,1.5,-0.05,
+        0.05,1.5,0.085]
+  ri.Patch("bilinear",{'P':face})
+
+  ri.TransformEnd()
+
+  # Detail 2
+  ri.TransformBegin()
+  ri.Rotate(-35, 0,0,1)
+
+  face=[-0.05,1.5,-0.05,
+        0,1.325,-0.175,
+        -0.05,1.5,0.085,
+        0,1.35,0.125]	
+  ri.Patch("bilinear",{'P':face})
+
+  face=[-0.175,1.5,-0.05,
+        -0.15,1.24,-0.22,
+        -0.175,1.5,0.085,
+        -0.15,1.22,0.125]
+  ri.Patch("bilinear",{'P':face})
+  
+  face=[-0.175,1.5,-0.05,
+        -0.15,1.24,-0.22,
+        -0.05,1.5,-0.05,
+        0,1.325,-0.175]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[-0.175,1.5,0.085,
+        -0.15,1.22,0.125,
+        -0.05,1.5,0.085,
+        0,1.35,0.125]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[-0.175,1.5,-0.05,
+        -0.175,1.5,0.085,
+        -0.05,1.5,-0.05,
+        -0.05,1.5,0.085]
+  ri.Patch("bilinear",{'P':face})
+
+  ri.TransformEnd()
+
+  ri.TransformBegin()
+  ri.Rotate(-20, 0,0,1)
+  ri.Rotate(90, 1,0,0)
+  ri.Translate(0,-0.025,0)
+  ri.Cylinder(0.17,-1.45,-1.1,360)
+  
+  ri.AttributeBegin()
+  ri.Bxdf('PxrDiffuse', 'smooth', { 
+          'color diffuseColor' : [0.001147,0.06711,0.516743]
+  }) 
+  ri.Disk(-1.45,0.17,360)
+  ri.AttributeEnd()
+  
+  ri.TransformEnd()
+
+  ri.Hyperboloid([ widthBig + 0.05,0.0,-0.225],[widthBig + 0.05,0.0,0.125],330)
+
   ri.TransformBegin()
   ri.Rotate(85, 0,0,1)
   ri.Hyperboloid([ widthBig + 0.05,0.0,-0.225],[widthBig + 0.125,0.0,-0.175],330)
   ri.Hyperboloid([ widthBig + 0.125,0.0,-0.175],[widthBig + 0.15,0.0,0.125],330)
   ri.TransformEnd()
+
   ri.AttributeEnd()
   ri.TransformEnd()
 
