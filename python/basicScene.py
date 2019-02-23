@@ -32,9 +32,9 @@ def main(filename,
 
   ri.Projection(ri.PERSPECTIVE,{ri.FOV:fov})
 
-  ri.Translate(0,0.25,3)
-  ri.Rotate(-30,1,0,0)
-  ri.Rotate(-230,0,1,0)
+  ri.Translate(0,0.25,4)
+  ri.Rotate(-90,1,0,0)
+  ri.Rotate(-290,0,1,0)
 
   #######################################################################
   #World Begin
@@ -274,13 +274,13 @@ def main(filename,
   ri.Rotate(-20, 0,0,1)
   ri.Rotate(90, 1,0,0)
   ri.Translate(0,-0.025,0)
-  ri.Cylinder(0.17,-1.45,-1.1,360)
+  ri.Cylinder(0.15,-1.45,-1.1,360)
   
   ri.AttributeBegin()
   ri.Bxdf('PxrDiffuse', 'smooth', { 
           'color diffuseColor' : [0.001147,0.06711,0.516743]
   }) 
-  ri.Disk(-1.45,0.17,360)
+  ri.Disk(-1.45,0.15,360)
   ri.AttributeEnd()
   
   ri.TransformEnd()
@@ -291,6 +291,140 @@ def main(filename,
   ri.Rotate(85, 0,0,1)
   ri.Hyperboloid([ widthBig + 0.05,0.0,-0.225],[widthBig + 0.125,0.0,-0.175],330)
   ri.Hyperboloid([ widthBig + 0.125,0.0,-0.175],[widthBig + 0.15,0.0,0.125],330)
+  ri.TransformEnd()
+
+  # Detail 3 and Detail 4
+  ri.TransformBegin()
+  ri.Rotate(-20, 0,0,1)
+
+  # Detail 3
+  ri.TransformBegin()
+
+  ri.Rotate(-110, 0,0,1)
+
+  face=[0,1.65,0.05,
+        0.1,1.325,-0.175,
+        0,1.65,0.185,
+        0.1,1.35,0.125]	
+  ri.Patch("bilinear",{'P':face})
+
+  face=[0.25,1.65,0.05,
+        0.5,1.22,-0.175,
+        0.25,1.65,0.185,
+        0.5,1.22,0.125]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[0.25,1.65,0.05,
+        0.5,1.22,-0.175,
+        0,1.65,0.05,
+        0.1,1.325,-0.175]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[0.25,1.65,0.185,
+        0.5,1.22,0.125,
+        0,1.65,0.185,
+        0.1,1.35,0.125]
+  ri.Patch("bilinear",{'P':face})
+
+  ri.TransformEnd()
+
+  # Detail 4
+  ri.TransformBegin()
+
+  ri.Rotate(-65, 0,0,1)
+
+  face=[0,1.65,0.05,
+        -0.1,1.325,-0.175,
+        0,1.65,0.185,
+        -0.1,1.35,0.125]	
+  ri.Patch("bilinear",{'P':face})
+
+  face=[-0.25,1.65,0.05,
+        -0.5,1.22,-0.175,
+        -0.25,1.65,0.185,
+        -0.5,1.22,0.125]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[-0.25,1.65,0.05,
+        -0.5,1.22,-0.175,
+        0,1.65,0.05,
+        -0.1,1.325,-0.175]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[-0.25,1.65,0.185,
+        -0.5,1.22,0.125,
+        0,1.65,0.185,
+        -0.1,1.35,0.125]
+  ri.Patch("bilinear",{'P':face})
+
+  ri.TransformEnd()
+  ri.TransformEnd()
+
+  # Detail 5 and Detail 6
+  ri.TransformBegin()
+  ri.Rotate(-200, 0,0,1)
+
+  # Detail 5
+  ri.TransformBegin()
+
+  ri.Rotate(-110, 0,0,1)
+
+  face=[0,1.65,0.05,
+        0.1,1.325,-0.175,
+        0,1.65,0.185,
+        0.1,1.35,0.125]	
+  ri.Patch("bilinear",{'P':face})
+
+  face=[0.25,1.65,0.05,
+        0.5,1.22,-0.175,
+        0.25,1.65,0.185,
+        0.5,1.22,0.125]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[0.25,1.65,0.05,
+        0.5,1.22,-0.175,
+        0,1.65,0.05,
+        0.1,1.325,-0.175]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[0.25,1.65,0.185,
+        0.5,1.22,0.125,
+        0,1.65,0.185,
+        0.1,1.35,0.125]
+  ri.Patch("bilinear",{'P':face})
+
+  ri.TransformEnd()
+
+  # Detail 6
+  ri.TransformBegin()
+
+  ri.Rotate(-65, 0,0,1)
+
+  face=[0,1.65,0.05,
+        -0.1,1.325,-0.175,
+        0,1.65,0.185,
+        -0.1,1.35,0.125]	
+  ri.Patch("bilinear",{'P':face})
+
+  face=[-0.25,1.65,0.05,
+        -0.5,1.22,-0.175,
+        -0.25,1.65,0.185,
+        -0.5,1.22,0.125]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[-0.25,1.65,0.05,
+        -0.5,1.22,-0.175,
+        0,1.65,0.05,
+        -0.1,1.325,-0.175]
+  ri.Patch("bilinear",{'P':face})
+
+  face=[-0.25,1.65,0.185,
+        -0.5,1.22,0.125,
+        0,1.65,0.185,
+        -0.1,1.35,0.125]
+  ri.Patch("bilinear",{'P':face})
+
+  ri.TransformEnd()
   ri.TransformEnd()
 
   ri.AttributeEnd()
