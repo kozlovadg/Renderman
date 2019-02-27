@@ -336,16 +336,26 @@ def main(filename,
   # ------------- Metal In -------------
   diskPosition = 0.15
   ri.AttributeBegin()
+  ri.Pattern('PxrTexture','PxrTexture1',
+  {
+        'string filename' : ["/Users/daria/Desktop/texture.tx"],
+  })
+  ri.Pattern('PxrMix','PxrMix1',
+  {
+        'reference color color2' : ["PxrTexture1:missingColor"],
+        'reference float mix' : ["PxrTexture1:resultA"],
+        'color color1' : [1,0,0]
+  })
   ri.Attribute( 'user' , {'string __materialid' : ['metal_in'] })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
   ri.Bxdf('PxrSurface', 'metal_in', {
-          'float diffuseGain' : [0],
+          'reference color diffuseColor' : ["PxrMix1:resultRGB"],
+          'reference float diffuseGain' : ["PxrTexture1:resultA"],
           'int specularFresnelMode' : [1],
-          'color specularEdgeColor' : [1 ,1 ,1],
-          'color specularIor' : [4.3696842, 2.916713, 1.654698],
-          'float specularAnisotropy' : [1.0],
-          'color specularExtinctionCoeff' : [5.20643, 4.2313662, 3.7549689],
-          'float specularRoughness' : [0.5], 
+          'color specularEdgeColor' : [0.54 ,0.54 ,0.54],
+          'color specularIor' : [2.5, 2.5, 2.5],
+          'color specularExtinctionCoeff' : [2.9996, 2.9996, 2.9996],
+          'float specularRoughness' : [0.3], 
           'integer specularModelType' : [1] ,
           'string __materialid' : ['metal_in']
   })
