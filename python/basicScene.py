@@ -38,7 +38,7 @@ def main(filename,
 
   ri.Translate(0,0.25,3.2)
   ri.Rotate(-30,1,0,0)
-  ri.Rotate(-230,0,1,0)
+  ri.Rotate(-130,0,1,0)
 
   #######################################################################
   #World Begin
@@ -126,7 +126,10 @@ def main(filename,
   ri.Bxdf('PxrDiffuse', 'smooth', { 
           'reference color diffuseColor' : ['clockface_paper:Cout']
   })
+  ri.TransformBegin()
+  #ri.Rotate(15, 0, 0, 1)
   ri.Disk(diskPosition-0.005,widthSmall-0.5,360)
+  ri.TransformEnd()
   ri.AttributeEnd()
 
   # ------------- Plastic In -------------
