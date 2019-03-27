@@ -1,0 +1,23 @@
+shader clockface (
+	color Cin=1,
+    float angle = 45.0,
+    string textureName = "clockface.tx",
+    float scale1 = 1,
+    float scale2 = 1,
+    float translate1 = 0,
+    float translate2 = 0, 
+output	color Cout=1,
+output	float Calpha=0,
+output	float Calphainvert=0,
+)
+{
+    float rot = radians(angle);
+    point d = rotate(P, rot, point(0,0,0), point(0,1,0));
+    float s=(translate1 + d[0] * cos(d[1]))* scale1;
+    float t=(acos(d[2])/M_PI + translate2) * scale2;
+    float alpha = 0;
+    Cout=(color)texture(textureName,s,t, "alpha",alpha);
+    Calpha = alpha;
+    Calphainvert = 1-alpha;
+}
+

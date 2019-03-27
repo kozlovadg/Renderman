@@ -37,8 +37,8 @@ def main(filename,
   ri.Projection(ri.PERSPECTIVE,{ri.FOV:fov})
 
   ri.Translate(0,0.25,3.2)
-  ri.Rotate(-30,1,0,0)
-  ri.Rotate(-130,0,1,0)
+  ri.Rotate(-90,1,0,0)
+  ri.Rotate(-230,0,1,0)
 
   #######################################################################
   #World Begin
@@ -90,14 +90,64 @@ def main(filename,
 
   # ------------- Metal In -------------
   ri.AttributeBegin()
+
+  ri.Attribute ('displacementbound', {'float sphere' : [2], 'string coordinatesystem' : ['object']})
+
+  ri.Pattern('clockface','clockface', 
+  { 
+    'float angle' : [75.0],
+    'string textureName' : ['blue_numbers.tx'],
+    'float scale1' : [0.5],
+    'float scale2' : [1.35],
+    'float translate1' : [1.075],
+    'float translate2' : [-0.12],
+  })
+  ri.Pattern('clockface','nine', 
+  { 
+    'float angle' : [75.0],
+    'string textureName' : ['blue_numbers_nine.tx'],
+    'float scale1' : [0.5],
+    'float scale2' : [1.35],
+    'float translate1' : [1.075],
+    'float translate2' : [-0.12],
+  })
+  ri.Pattern('PxrMix','mix_blue_numbers',
+  {
+    'color color1' : [0.05,0.08,0.69], 
+    'color color2' : [0.0,0.0,0.0], 
+    'reference float mix' : ['clockface:Calphainvert'], 
+  })
+  ri.Pattern('PxrMix','mix_blue_numbers_EdgeColor',
+  {
+    'color color1' : [0.025,0.025,0.025], 
+    'color color2' : [0.54,0.54,0.54], 
+    'reference float mix' : ['clockface:Calphainvert'], 
+  })
+  ri.Pattern('PxrMix','mix_blue_numbers_ior',
+  {
+    'color color1' : [1.45,1.45,1.45], 
+    'color color2' : [2.5,2.5,2.5], 
+    'reference float mix' : ['clockface:Calphainvert'], 
+  })
   ri.Bxdf('PxrSurface', 'metal_in', {
+          'reference color diffuseColor' : ['mix_blue_numbers:resultRGB'], 
+          'reference float diffuseGain' : ['clockface:Calpha'],
           'int specularFresnelMode' : [1],
-          'color specularEdgeColor' : [0.54 ,0.54 ,0.54],
-          'color specularIor' : [2.5, 2.5, 2.5],
+          'reference color specularEdgeColor' : ['mix_blue_numbers_EdgeColor:resultRGB'],
+          'reference color specularIor' : ['mix_blue_numbers_ior:resultRGB'],
           'color specularExtinctionCoeff' : [2.9996, 2.9996, 2.9996],
           'float specularRoughness' : [0.3], 
           'integer specularModelType' : [1] ,
           'string __materialid' : ['metal_in']
+  })
+  ri.Displace( 'PxrDisplace' ,'displacement' ,
+  {
+    'int enabled' : [1],
+    'float dispAmount' : [1.0],
+    'reference float dispScalar' : ['clockface:Calpha'] ,
+    'vector dispVector' : [0, 0 ,0],
+    'vector modelDispVector' : [0, 0 ,0],
+    'string __materialid' : ["mainplate"]
   })
   m_iD.metalIn(ri, diskPosition, widthSmall)
   ri.AttributeEnd()
@@ -117,19 +167,21 @@ def main(filename,
   # ------------- Paper In -------------
   ri.AttributeBegin()
 
-  ri.Pattern('clockface_paper','clockface_paper', 
+  ri.Pattern('clockface','clockface', 
   { 
+    'float angle' : [75.0],
+    'string textureName' : ['clockface.tx'],
+    'float scale2' : [3.0],
+    'float translate1' : [0.5],
+    'float translate2' : [-0.325],
   })
 
   ri.Attribute( 'user' , {'string __materialid' : ['metal_in'] })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
   ri.Bxdf('PxrDiffuse', 'smooth', { 
-          'reference color diffuseColor' : ['clockface_paper:Cout']
+          'reference color diffuseColor' : ['clockface:Cout']
   })
-  ri.TransformBegin()
-  #ri.Rotate(15, 0, 0, 1)
   ri.Disk(diskPosition-0.005,widthSmall-0.5,360)
-  ri.TransformEnd()
   ri.AttributeEnd()
 
   # ------------- Plastic In -------------
@@ -202,7 +254,7 @@ def checkAndCompileShader(shader) :
       sys.exit('shader compilation failed')
 
 if __name__ == '__main__':  
-  shaderName='clockface_paper'
+  shaderName='clockface'
   checkAndCompileShader(shaderName)
   cl.ProcessCommandLine('testScenes.rib')
   main(cl.filename,
