@@ -91,7 +91,7 @@ def main(filename,
   # ------------- Metal In -------------
   ri.AttributeBegin()
 
-  ri.Attribute ('displacementbound', {'float sphere' : [2], 'string coordinatesystem' : ['object']})
+  ri.Attribute ('displacementbound', {'float sphere' : [0.2], 'string coordinatesystem' : ['shader']})
 
   ri.Pattern('clockface','clockface', 
   { 
@@ -129,6 +129,17 @@ def main(filename,
     'color color2' : [2.5,2.5,2.5], 
     'reference float mix' : ['clockface:Calphainvert'], 
   })
+  # Does not work Begin
+  ri.Displace( 'PxrDisplace' ,'displacement' ,
+  {
+    'int enabled' : [1],
+    'float dispAmount' : [1.0],
+    'reference float dispScalar' : ['clockface:Calpha'] ,
+    'vector dispVector' : [0, 0 ,0],
+    'vector modelDispVector' : [0, 0 ,0],
+    'string __materialid' : ["mainplate"]
+  })
+  # Does not work End
   ri.Bxdf('PxrSurface', 'metal_in', {
           'reference color diffuseColor' : ['mix_blue_numbers:resultRGB'], 
           'reference float diffuseGain' : ['clockface:Calpha'],
@@ -139,15 +150,6 @@ def main(filename,
           'float specularRoughness' : [0.3], 
           'integer specularModelType' : [1] ,
           'string __materialid' : ['metal_in']
-  })
-  ri.Displace( 'PxrDisplace' ,'displacement' ,
-  {
-    'int enabled' : [1],
-    'float dispAmount' : [1.0],
-    'reference float dispScalar' : ['clockface:Calpha'] ,
-    'vector dispVector' : [0, 0 ,0],
-    'vector modelDispVector' : [0, 0 ,0],
-    'string __materialid' : ["mainplate"]
   })
   m_iD.metalIn(ri, diskPosition, widthSmall)
   ri.AttributeEnd()
@@ -170,18 +172,26 @@ def main(filename,
   ri.Pattern('clockface','clockface', 
   { 
     'float angle' : [75.0],
-    'string textureName' : ['clockface.tx'],
-    'float scale2' : [3.0],
-    'float translate1' : [0.5],
-    'float translate2' : [-0.325],
+    'string textureName' : ['black_numbers.tx'],
+    'float scale1' : [0.825],
+    'float scale2' : [2.35],
+    'float translate1' : [0.6],
+    'float translate2' : [-0.288],
   })
-
-  ri.Attribute( 'user' , {'string __materialid' : ['metal_in'] })
+  ri.Pattern('PxrMix','mix_black_numbers',
+  {
+    'color color1' : [0.05,0.05,0.05], 
+    'color color2' : [0.8,0.8,0.8], 
+    'reference float mix' : ['clockface:Calphainvert'], 
+  })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
-  ri.Bxdf('PxrDiffuse', 'smooth', { 
-          'reference color diffuseColor' : ['clockface:Cout']
+  ri.Bxdf('PxrSurface', 'paper_in',{ 
+    'reference color diffuseColor' : ['mix_black_numbers:resultRGB'],
+    'int specularFresnelMode' : [1], 
+    'color specularIor' : [1.2,1.2,1.2],
+    'float specularRoughness' : [0.311376],
   })
-  ri.Disk(diskPosition-0.005,widthSmall-0.5,360)
+  ri.Disk(diskPosition-0.005,widthSmall-0.5,-360)
   ri.AttributeEnd()
 
   # ------------- Plastic In -------------

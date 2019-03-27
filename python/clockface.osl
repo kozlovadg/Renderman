@@ -9,6 +9,7 @@ shader clockface (
 output	color Cout=1,
 output	float Calpha=0,
 output	float Calphainvert=0,
+output	float resultF=0,
 )
 {
     float rot = radians(angle);
@@ -19,5 +20,6 @@ output	float Calphainvert=0,
     Cout=(color)texture(textureName,s,t, "alpha",alpha);
     Calpha = alpha;
     Calphainvert = 1-alpha;
+    resultF=alpha*0.1;
 }
 
