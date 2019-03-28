@@ -36,9 +36,9 @@ def main(filename,
 
   ri.Projection(ri.PERSPECTIVE,{ri.FOV:fov})
 
-  ri.Translate(0,0.25,3.2)
-  ri.Rotate(-90,1,0,0)
-  ri.Rotate(-230,0,1,0)
+  ri.Translate(0,0.5,3.2)
+  ri.Rotate(-50,1,0,0)
+  ri.Rotate(40,0,1,0)
 
   #######################################################################
   #World Begin
@@ -68,6 +68,17 @@ def main(filename,
   diskPosition = 0.15
 
   ri.Rotate(90,1,0,0)
+
+  # ------------- Plane -------------
+  ri.TransformBegin()
+  ri.Translate(0,0,0.4)
+  ri.Scale(3,3,3)
+  face=[1.5,-1.5,0,
+            1.5,1.5,0,
+            -1.5,-1.5,0,
+            -1.5,1.5,0]
+  ri.Patch("bilinear",{'P':face})
+  ri.TransformEnd()
 
   # ------------- Glass -------------
   ri.AttributeBegin()
@@ -113,14 +124,14 @@ def main(filename,
   })
   ri.Pattern('PxrMix','mix_blue_numbers',
   {
-    'color color1' : [0.05,0.08,0.69], 
+    'color color1' : [0.000147,0.05711,0.216743], 
     'color color2' : [0.0,0.0,0.0], 
     'reference float mix' : ['clockface:Calphainvert'], 
   })
   ri.Pattern('PxrMix','mix_blue_numbers_EdgeColor',
   {
     'color color1' : [0.025,0.025,0.025], 
-    'color color2' : [0.54,0.54,0.54], 
+    'color color2' : [0.64,0.64,0.64], 
     'reference float mix' : ['clockface:Calphainvert'], 
   })
   ri.Pattern('PxrMix','mix_blue_numbers_ior',
@@ -134,7 +145,7 @@ def main(filename,
   {
     'int enabled' : [1],
     'float dispAmount' : [1.0],
-    'reference float dispScalar' : ['clockface:Calpha'] ,
+    'reference float dispScalar' : ['nine:Calpha'] ,
     'vector dispVector' : [0, 0 ,0],
     'vector modelDispVector' : [0, 0 ,0],
     'string __materialid' : ["mainplate"]
@@ -146,8 +157,8 @@ def main(filename,
           'int specularFresnelMode' : [1],
           'reference color specularEdgeColor' : ['mix_blue_numbers_EdgeColor:resultRGB'],
           'reference color specularIor' : ['mix_blue_numbers_ior:resultRGB'],
-          'color specularExtinctionCoeff' : [2.9996, 2.9996, 2.9996],
-          'float specularRoughness' : [0.3], 
+          'color specularExtinctionCoeff' : [3.9996, 3.9996, 3.9996],
+          'float specularRoughness' : [0.4], 
           'integer specularModelType' : [1] ,
           'string __materialid' : ['metal_in']
   })
@@ -159,14 +170,15 @@ def main(filename,
   ri.Translate(0,0,0.225)
   m_iD.handsWhite(ri)
   ri.AttributeBegin()
-  ri.Bxdf('PxrDiffuse', 'smooth', { 
-          'color diffuseColor' : [0.001147,0.06711,0.516743]
+  ri.Bxdf('PxrDisney', 'smooth', { 
+          'color baseColor' : [0.000147,0.05711,0.216743],
+          'float metallic' :  [0.2] 
   })
   m_iD.handsBlue(ri)
   ri.AttributeEnd()
   ri.TransformEnd()
 
-  # ------------- Paper In -------------
+  # ------------- White Metal In -------------
   ri.AttributeBegin()
 
   ri.Pattern('clockface','clockface', 
@@ -178,6 +190,27 @@ def main(filename,
     'float translate1' : [0.6],
     'float translate2' : [-0.288],
   })
+  ri.Pattern('metalLines','metalLines', 
+  { 
+    'float angle' : [75.0],
+    'float scale' : [20.0],
+  })
+  ri.Pattern('PxrVoronoise','voronoi_noise',
+  {
+    'float frequency' : [20.0],  
+  })
+  ri.Pattern('PxrMix','mix_stripes_roughness',
+  {
+    'reference color color1' : ['voronoi_noise:resultRGB'], 
+    'color color2' : [0.311376,0.0,0.0], 
+    'reference float mix' : ['metalLines:resultStripes'], 
+  })
+  ri.Pattern('PxrMix','mix_stripes_spec',
+  {
+    'reference color color1' : ['voronoi_noise:resultRGB'], 
+    'color color2' : [0.5,0.0,0.0], 
+    'reference float mix' : ['metalLines:resultStripes'], 
+  })
   ri.Pattern('PxrMix','mix_black_numbers',
   {
     'color color1' : [0.05,0.05,0.05], 
@@ -185,11 +218,12 @@ def main(filename,
     'reference float mix' : ['clockface:Calphainvert'], 
   })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
-  ri.Bxdf('PxrSurface', 'paper_in',{ 
-    'reference color diffuseColor' : ['mix_black_numbers:resultRGB'],
-    'int specularFresnelMode' : [1], 
-    'color specularIor' : [1.2,1.2,1.2],
-    'float specularRoughness' : [0.311376],
+  ri.Bxdf('PxrDisney', 'white_metal_in',{ 
+    'reference color baseColor' : ['mix_black_numbers:resultRGB'],
+    'reference float specular' : ['mix_stripes_spec:resultR'],
+    'reference float metallic' : ['metalLines:resultStripes'],
+    'reference float roughness' : ['mix_stripes_roughness:resultR'],
+    'float anisotropic' : [0.6] 
   })
   ri.Disk(diskPosition-0.005,widthSmall-0.5,-360)
   ri.AttributeEnd()
@@ -198,10 +232,26 @@ def main(filename,
   ri.AttributeBegin()
   ri.TransformBegin()
   ri.Rotate(-18, 0,0,1)
+  ri.Pattern('clockface','circle', 
+  { 
+    'float angle' : [75.0],
+    'string textureName' : ['plastic_circle.tx'],
+    'float scale1' : [0.48],
+    'float scale2' : [1.15],
+    'float translate1' : [1.025],
+    'float translate2' : [-0.055],
+  })
+  ri.Pattern('PxrMix','mix_circle',
+  {
+    'color color1' : [0.8,0.8,0.8], 
+    'color color2' : [0.4,0.4,0.4], 
+    'reference float mix' : ['circle:Calpha'], 
+  })
   ri.Attribute( 'user' , {'string __materialid' : ['metal_in'] })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
-  ri.Bxdf('PxrDiffuse', 'smooth', { 
-          'color diffuseColor' : [0.8,0.8,0.8]
+  ri.Bxdf('PxrDisney', 'plastic', { 
+      'color baseColor' : [0.8,0.8,0.8], 
+      'float roughness' : [.5], 
   })
   m_iD.plasticIn(ri, widthSmall, diskPosition)
   ri.TransformEnd()
@@ -221,32 +271,22 @@ def main(filename,
   ri.AttributeBegin()
   ri.Attribute( 'user' , {'string __materialid' : ['metal'] })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
+  ri.Pattern('metalLines','metalLines', 
+  { 
+    'float scale' : [20.0],
+  })
   ri.Bxdf('PxrDisney','metal',
   {
     'color baseColor' : [.25,.25,.25], 
-    'float metallic' : [1], 
-    'float specular' : [1], 
+    'reference float metallic' : ['metalLines:resultRound'], 
+    'reference float specular' : ['metalLines:resultRound'], 
     'float roughness' : [0.2], 
+    'float anisotropic' : [0.6], 
     'string __materialid' : ['metal']
   })
   m_oD.outOrdinaryMetalDetails(ri, widthSmall, widthBig, hight)
   ri.AttributeEnd()
   ri.TransformEnd()
-
-  ## -------------- Cylinders Metal Out ------------
-  ri.AttributeBegin()
-  ri.Attribute( 'user' , {'string __materialid' : ['metal'] })
-  ri.Attribute( 'Ri', {'int Sides' : [2] })
-  ri.Bxdf('PxrDisney','metal',
-  {
-    'color baseColor' : [.25,.25,.25], 
-    'float metallic' : [1], 
-    'float specular' : [1], 
-    'float roughness' : [0.2], 
-    'string __materialid' : ['metal']
-  })
-  m_oD.outCylindersMetalDetails(ri)
-  ri.AttributeEnd()
 
   ri.WorldEnd()
   #######################################################################
@@ -265,6 +305,8 @@ def checkAndCompileShader(shader) :
 
 if __name__ == '__main__':  
   shaderName='clockface'
+  checkAndCompileShader(shaderName)
+  shaderName='metalLines'
   checkAndCompileShader(shaderName)
   cl.ProcessCommandLine('testScenes.rib')
   main(cl.filename,

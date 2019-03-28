@@ -12,6 +12,7 @@ output	float Calphainvert=0,
 )
 {
     float rot = radians(angle);
+    //point PP = transform("world", "shader", P);
     point d = rotate(P, rot, point(0,0,0), point(0,1,0));
     float s=(translate1 + d[0] * cos(d[1]))* scale1;
     float t=(acos(d[2])/M_PI + translate2) * scale2;
