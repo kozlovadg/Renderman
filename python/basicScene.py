@@ -34,7 +34,21 @@ def main(filename,
   ri.Option( 'statistics', {'filename'  : [ 'stats.txt' ] } )
   ri.Option( 'statistics', {'endofframe' : [ 1 ] })
 
+  """
+  ri.DepthOfField(1.0,0.175,3.25)
   ri.Projection(ri.PERSPECTIVE,{ri.FOV:fov})
+  """
+
+  ri.Projection('PxrCamera',{
+                ri.FOV:fov,
+                'float fStop' : [1.0],
+                'float focalLength' : [0.175],
+                'float focalDistance' : [3.25],
+                'color transverse' : [1,1.0015, 1.002], 
+                'float radial1' : [0.05],
+                'float radial2' : [-0.035],
+                'float natural' : [0.25],
+  })
 
   ri.Translate(0,0.5,3.2)
   ri.Rotate(-50,1,0,0)
@@ -72,7 +86,7 @@ def main(filename,
   # ------------- Plane -------------
   ri.TransformBegin()
   ri.Translate(0,0,0.4)
-  ri.Scale(3,3,3)
+  ri.Scale(4,4,4)
   face=[1.5,-1.5,0,
             1.5,1.5,0,
             -1.5,-1.5,0,
@@ -106,21 +120,21 @@ def main(filename,
 
   ri.Pattern('clockface','clockface', 
   { 
-    'float angle' : [75.0],
+    'float angle' : [16.0],
     'string textureName' : ['blue_numbers.tx'],
-    'float scale1' : [0.5],
-    'float scale2' : [1.35],
-    'float translate1' : [1.075],
-    'float translate2' : [-0.12],
+    'float scale1' : [0.48],
+    'float scale2' : [0.48],
+    'float translate1' : [0.53],
+    'float translate2' : [0.51],
   })
   ri.Pattern('clockface','nine', 
   { 
-    'float angle' : [75.0],
+    'float angle' : [16.0],
     'string textureName' : ['blue_numbers_nine.tx'],
-    'float scale1' : [0.5],
-    'float scale2' : [1.35],
-    'float translate1' : [1.075],
-    'float translate2' : [-0.12],
+    'float scale1' : [0.48],
+    'float scale2' : [0.48],
+    'float translate1' : [0.53],
+    'float translate2' : [0.51],
   })
   ri.Pattern('PxrMix','mix_blue_numbers',
   {
@@ -140,17 +154,27 @@ def main(filename,
     'color color2' : [2.5,2.5,2.5], 
     'reference float mix' : ['clockface:Calphainvert'], 
   })
-  # Does not work Begin
+  ri.Pattern('PxrMix','displace_numbers',
+  {
+    'color color1' : [0.01,0.0,0.0], 
+    'color color2' : [0,0.0,0.0], 
+    'reference float mix' : ['clockface:Calphainvert'], 
+  })
+  ri.Pattern('PxrMix','displace_numbers_nine',
+  {
+    'reference color color1' : ['displace_numbers:resultRGB'], 
+    'color color2' : [0.05,0.0,0.0], 
+    'reference float mix' : ['nine:Calpha'], 
+  })
   ri.Displace( 'PxrDisplace' ,'displacement' ,
   {
     'int enabled' : [1],
-    'float dispAmount' : [1.0],
-    'reference float dispScalar' : ['nine:Calpha'] ,
+    'reference float dispAmount' : ['displace_numbers_nine:resultR'],
+    'reference float dispScalar' : ['clockface:Calpha'] ,
     'vector dispVector' : [0, 0 ,0],
     'vector modelDispVector' : [0, 0 ,0],
-    'string __materialid' : ["mainplate"]
+    'string __materialid' : ["blue_numbers_displace"]
   })
-  # Does not work End
   ri.Bxdf('PxrSurface', 'metal_in', {
           'reference color diffuseColor' : ['mix_blue_numbers:resultRGB'], 
           'reference float diffuseGain' : ['clockface:Calpha'],
@@ -170,11 +194,48 @@ def main(filename,
   ri.Translate(0,0,0.225)
   m_iD.handsWhite(ri)
   ri.AttributeBegin()
+  ri.Attribute ('displacementbound', {'float sphere' : [0.2], 'string coordinatesystem' : ['shader']})
+  ri.Pattern('rectangle','rectangle', 
+  { 
+      'color blue' : [0.000147,0.05711,0.216743],
+  })
+  ri.Displace( 'PxrDisplace' ,'displacement' ,
+  {
+    'int enabled' : [1],
+    'float dispAmount' : [-0.01],
+    'reference float dispScalar' : ['rectangle:alpha'] ,
+    'vector dispVector' : [0, 0 ,0],
+    'vector modelDispVector' : [0, 0 ,0],
+    'string __materialid' : ["hands_minute_displace"]
+  })
   ri.Bxdf('PxrDisney', 'smooth', { 
-          'color baseColor' : [0.000147,0.05711,0.216743],
+          'reference color baseColor' : ['rectangle:Cout'],
           'float metallic' :  [0.2] 
   })
-  m_iD.handsBlue(ri)
+  m_iD.handsBlue_minute(ri)
+  ri.AttributeEnd()
+  ri.AttributeBegin()
+  ri.Attribute ('displacementbound', {'float sphere' : [0.2], 'string coordinatesystem' : ['shader']})
+  ri.Pattern('rectangle','rectangle', 
+  { 
+        'color blue' : [0.000147,0.05711,0.216743],
+        'float mindistance' : [0.45],
+        'float maxdistance' : [0.64],
+  })
+  ri.Displace( 'PxrDisplace' ,'displacement' ,
+  {
+    'int enabled' : [1],
+    'float dispAmount' : [-0.01],
+    'reference float dispScalar' : ['rectangle:alpha'] ,
+    'vector dispVector' : [0, 0 ,0],
+    'vector modelDispVector' : [0, 0 ,0],
+    'string __materialid' : ["hands_hours_displace"]
+  })
+  ri.Bxdf('PxrDisney', 'smooth', { 
+          'reference color baseColor' : ['rectangle:Cout'],
+          'float metallic' :  [0.2] 
+  })
+  m_iD.handsBlue_hour(ri)
   ri.AttributeEnd()
   ri.TransformEnd()
 
@@ -183,16 +244,21 @@ def main(filename,
 
   ri.Pattern('clockface','clockface', 
   { 
-    'float angle' : [75.0],
+    'float angle' : [16.0],
     'string textureName' : ['black_numbers.tx'],
-    'float scale1' : [0.825],
-    'float scale2' : [2.35],
-    'float translate1' : [0.6],
-    'float translate2' : [-0.288],
+    'float scale1' : [0.8],
+    'float scale2' : [0.8],
+    'float translate1' : [0.49],
+  })
+  ri.Pattern('PxrMix','mix_black_numbers',
+  {
+    'color color1' : [0.05,0.05,0.05], 
+    'color color2' : [0.8,0.8,0.8], 
+    'reference float mix' : ['clockface:Calphainvert'], 
   })
   ri.Pattern('metalLines','metalLines', 
   { 
-    'float angle' : [75.0],
+    'float angle' : [110.0],
     'float scale' : [20.0],
   })
   ri.Pattern('PxrVoronoise','voronoi_noise',
@@ -211,12 +277,6 @@ def main(filename,
     'color color2' : [0.5,0.0,0.0], 
     'reference float mix' : ['metalLines:resultStripes'], 
   })
-  ri.Pattern('PxrMix','mix_black_numbers',
-  {
-    'color color1' : [0.05,0.05,0.05], 
-    'color color2' : [0.8,0.8,0.8], 
-    'reference float mix' : ['clockface:Calphainvert'], 
-  })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
   ri.Bxdf('PxrDisney', 'white_metal_in',{ 
     'reference color baseColor' : ['mix_black_numbers:resultRGB'],
@@ -234,24 +294,29 @@ def main(filename,
   ri.Rotate(-18, 0,0,1)
   ri.Pattern('clockface','circle', 
   { 
-    'float angle' : [75.0],
+    'float angle' : [-75.0],
     'string textureName' : ['plastic_circle.tx'],
-    'float scale1' : [0.48],
-    'float scale2' : [1.15],
-    'float translate1' : [1.025],
-    'float translate2' : [-0.055],
+    'float scale1' : [0.475],
+    'float scale2' : [0.475],
+    'float translate1' : [0.49],
   })
   ri.Pattern('PxrMix','mix_circle',
   {
     'color color1' : [0.8,0.8,0.8], 
-    'color color2' : [0.4,0.4,0.4], 
+    'color color2' : [0.2,0.2,0.2], 
+    'reference float mix' : ['circle:Calpha'], 
+  })
+  ri.Pattern('PxrMix','mix_circle_roughness',
+  {
+    'color color1' : [0.3,0.0,0.0], 
+    'color color2' : [0.9,0.0,0.0], 
     'reference float mix' : ['circle:Calpha'], 
   })
   ri.Attribute( 'user' , {'string __materialid' : ['metal_in'] })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
   ri.Bxdf('PxrDisney', 'plastic', { 
-      'color baseColor' : [0.8,0.8,0.8], 
-      'float roughness' : [.5], 
+      'reference color baseColor' : ['mix_circle:resultRGB'], 
+      'reference float roughness' : ['mix_circle_roughness:resultR'], 
   })
   m_iD.plasticIn(ri, widthSmall, diskPosition)
   ri.TransformEnd()
@@ -271,15 +336,11 @@ def main(filename,
   ri.AttributeBegin()
   ri.Attribute( 'user' , {'string __materialid' : ['metal'] })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
-  ri.Pattern('metalLines','metalLines', 
-  { 
-    'float scale' : [20.0],
-  })
   ri.Bxdf('PxrDisney','metal',
   {
     'color baseColor' : [.25,.25,.25], 
-    'reference float metallic' : ['metalLines:resultRound'], 
-    'reference float specular' : ['metalLines:resultRound'], 
+    'float metallic' : [0.9], 
+    'float specular' : [0.9], 
     'float roughness' : [0.2], 
     'float anisotropic' : [0.6], 
     'string __materialid' : ['metal']
@@ -307,6 +368,8 @@ if __name__ == '__main__':
   shaderName='clockface'
   checkAndCompileShader(shaderName)
   shaderName='metalLines'
+  checkAndCompileShader(shaderName)
+  shaderName='rectangle'
   checkAndCompileShader(shaderName)
   cl.ProcessCommandLine('testScenes.rib')
   main(cl.filename,

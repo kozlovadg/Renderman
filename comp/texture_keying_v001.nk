@@ -8,35 +8,23 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
             <dock id="" hideTitles="1" activePageId="Toolbar.1">
                 <page id="Toolbar.1"/>
             </dock>
-            <split size="540" stretch="1"/>
+            <split size="1017" stretch="1"/>
             <splitter orientation="2">
-                <split size="958"/>
-                <dock id="" activePageId="DAG.1" focus="true">
-                    <page id="DAG.1"/>
-                </dock>
-            </splitter>
-            <split size="1092"/>
-            <splitter orientation="2">
-                <split size="675"/>
+                <split size="560"/>
                 <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
                 </dock>
-                <split size="279"/>
-                <splitter orientation="1">
-                    <split size="366"/>
-                    <dock id="" activePageId="uk.co.thefoundry.histogram.1">
-                        <page id="uk.co.thefoundry.histogram.1"/>
-                    </dock>
-                    <split size="447"/>
-                    <dock id="" activePageId="uk.co.thefoundry.waveformscope.1">
-                        <page id="uk.co.thefoundry.waveformscope.1"/>
-                    </dock>
-                    <split size="271"/>
-                    <dock id="" activePageId="uk.co.thefoundry.vectorscope.1">
-                        <page id="uk.co.thefoundry.vectorscope.1"/>
-                    </dock>
-                </splitter>
+                <split size="394"/>
+                <dock id="" activePageId="DAG.1" focus="true">
+                    <page id="DAG.1"/>
+                    <page id="Curve Editor.1"/>
+                    <page id="DopeSheet.1"/>
+                </dock>
             </splitter>
+            <split size="615"/>
+            <dock id="" activePageId="Properties.1">
+                <page id="Properties.1"/>
+            </dock>
         </splitter>
     </window>
 </layout>
@@ -110,9 +98,9 @@ Invert {
  xpos -101
  ypos 242
 }
-set N11fa2670 [stack 0]
-push $N11fa2670
-push $N11fa2670
+set N144690 [stack 0]
+push $N144690
+push $N144690
 Roto {
  inputs 0
  output alpha
@@ -231,7 +219,7 @@ Invert {
  xpos -333
  ypos 351
 }
-set N2bfd2c60 [stack 0]
+set N1cf8f0 [stack 0]
 Merge2 {
  inputs 2+1
  operation minus
@@ -242,7 +230,7 @@ Merge2 {
  xpos -101
  ypos 351
 }
-push $N2bfd2c60
+push $N1cf8f0
 Copy {
  inputs 2
  from0 rgba.alpha
@@ -256,14 +244,14 @@ Premult {
  xpos -333
  ypos 476
 }
-set N2bfe3720 [stack 0]
+set N1e03b0 [stack 0]
 Invert {
  channels alpha
  name Invert4
  xpos -186
  ypos 472
 }
-set N2bfe76a0 [stack 0]
+set N1e4330 [stack 0]
 RotoPaint {
  output alpha
  curves {{{v x3f99999a}
@@ -12506,7 +12494,7 @@ Grade {
  xpos -186
  ypos 615
 }
-set N9ba23f40 [stack 0]
+set N94420a10 [stack 0]
 RotoPaint {
  curves {{{v x3f99999a}
   {f 0}
@@ -13287,7 +13275,7 @@ Invert {
  xpos -12
  ypos 744
 }
-push $N2bfe3720
+push $N1e03b0
 Dot {
  name Dot1
  xpos -443
@@ -13365,7 +13353,7 @@ Grade {
  xpos 341
  ypos 483
 }
-set N9bae5fd0 [stack 0]
+set N944dd630 [stack 0]
 RotoPaint {
  curves {{{v x3f99999a}
   {f 0}
@@ -18728,7 +18716,7 @@ RotoPaint {
  xpos 460
  ypos 722
 }
-set N9ff20210 [stack 0]
+set N9e117910 [stack 0]
 Invert {
  channels alpha
  name Invert9
@@ -18740,8 +18728,8 @@ Premult {
  xpos 460
  ypos 809
 }
-push $N9ff20210
-push $N9bae5fd0
+push $N9e117910
+push $N944dd630
 RotoPaint {
  curves {{{v x3f99999a}
   {f 0}
@@ -23695,7 +23683,7 @@ RotoPaint {
  xpos 341
  ypos 611
 }
-set Na1432460 [stack 0]
+set N9ec29d60 [stack 0]
 Invert {
  channels alpha
  name Invert8
@@ -23707,8 +23695,8 @@ Premult {
  xpos 341
  ypos 694
 }
-push $Na1432460
-push $N2bfe76a0
+push $N9ec29d60
+push $N1e4330
 Dot {
  name Dot2
  xpos 231
@@ -31151,14 +31139,14 @@ Write {
  xpos 197
  ypos 1143
 }
-push $N9ba23f40
+push $N94420a10
 Invert {
  channels alpha
  name Invert5
  xpos -186
  ypos 720
 }
-push $N2bfe3720
+push $N1e03b0
 Copy {
  inputs 2
  from0 rgba.alpha
@@ -31405,7 +31393,7 @@ Crop {
  xpos 839
  ypos 448
 }
-set N11cae8d0 [stack 0]
+set Na1b644b0 [stack 0]
 Keyer {
  operation "luminance key"
  range {0.0327264463 0.1677293503 1 1}
@@ -31609,7 +31597,7 @@ Roto {
  xpos 580
  ypos 651
 }
-set N9eeef6c0 [stack 0]
+set Na1b72bd0 [stack 0]
 Roto {
  inputs 0
  output alpha
@@ -31789,7 +31777,7 @@ Transform {
  xpos 534
  ypos 594
 }
-set Nf3f34c30 [stack 0]
+set Na1bbcdf0 [stack 0]
 ChannelMerge {
  inputs 2
  name ChannelMerge1
@@ -31801,9 +31789,9 @@ Invert {
  xpos 575
  ypos 796
 }
-push $N9eeef6c0
-push $Nf3f34c30
-push $N11cae8d0
+push $Na1b72bd0
+push $Na1bbcdf0
+push $Na1b644b0
 Keyer {
  operation "luminance key"
  range {0 0.02051084569 0.12197293 0.7733390571}
@@ -35703,7 +35691,7 @@ RotoPaint {
      {tx 1 x445d093a x44bbb196}
      {a ro 0 go 0 bo 0 ao 0 bs x43750000 bu 1 str 1 spx x44fc0000 spy x44bd0000 sb 1 ltt x40000000 tt x41880000}}}}}}
  toolbox {brush {
-  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { selectAll bs 73 h 1 str 1 ssx 1 ssy 1 sf 1 }
   { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
@@ -45782,7 +45770,7 @@ RotoPaint {
      {tx 1 x4542abc1 x44ac6b49}
      {a ro 0 go 0 bo 0 ao 0 bs x41533333 bu 1 str 1 spx x44fc0000 spy x44bd0000 sb 1 ltt x40000000 tt x41880000}}}}}}
  toolbox {brush {
-  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { selectAll bs 16.1 str 1 ssx 1 ssy 1 sf 1 }
   { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
@@ -55664,7 +55652,7 @@ RotoPaint {
      {tx 1 x4541d2a1 x44794380}
      {a ro 0 go 0 bo 0 ao 0 bs x412e6666 bu 1 str 1 spx x44fc0000 spy x44bd0000 sb 1 ltt x40000000 tt x41880000}}}}}}
  toolbox {brush {
-  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { selectAll bs 75.5 str 1 ssx 1 ssy 1 sf 1 }
   { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
@@ -65035,7 +65023,7 @@ RotoPaint {
      {tx 1 x45323741 x44fa648d}
      {a ro 0 go 0 bo 0 ao 0 bs x42910000 bu 1 str 1 spx x44fc0000 spy x44bd0000 sb 1 ltt x40000000 tt x41880000}}}}}}
  toolbox {brush {
-  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { selectAll bs 28.8 str 1 ssx 1 ssy 1 sf 1 }
   { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
@@ -76256,7 +76244,7 @@ RotoPaint {
      {tx 1 x451f8585 x450d269c}
      {a ro 0 go 0 bo 0 ao 0 bu 1 str 1 spx x44fc0000 spy x44bd0000 sb 1 ltt x40000000 tt x41880000}}}}}}
  toolbox {brush {
-  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { selectAll bs 27.8 str 1 ssx 1 ssy 1 sf 1 }
   { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
@@ -88182,7 +88170,7 @@ RotoPaint {
      {tx 1 x44c9b0f2 x4514d505}
      {a ro 0 go 0 bo 0 ao 0 bs x420f3333 bu 1 str 1 spx x44fc0000 spy x44bd0000 sb 1 ltt x40000000 tt x41880000}}}}}}
  toolbox {brush {
-  { selectAll str 1 ssx 1 ssy 1 sf 1 }
+  { selectAll bs 17.5 str 1 ssx 1 ssy 1 sf 1 }
   { createBezier str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBezierCusped str 1 ssx 1 ssy 1 sf 1 sb 1 }
   { createBSpline str 1 ssx 1 ssy 1 sf 1 sb 1 }
@@ -88250,14 +88238,19 @@ Crop {
  xpos 839
  ypos 1250
 }
+Clamp {
+ name Clamp1
+ xpos 839
+ ypos 1274
+}
 Write {
  channels rgba
  file /Users/daria/Documents/gitHub/Renderman/textures/plastic_circle.exr
  file_type exr
- version 4
+ version 5
  name Write4
  xpos 839
- ypos 1274
+ ypos 1308
 }
 Viewer {
  inputs 2

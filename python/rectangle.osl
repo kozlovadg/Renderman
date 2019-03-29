@@ -1,0 +1,38 @@
+surface rectangle (
+	color Cin=1,
+    color blue=color("rgb",0,0,1),
+    color white=color("rgb",1,1,1),
+    float mindistance = 0.6,
+    float maxdistance = 0.89,
+output color Cout=0,
+output float alpha=0,
+	)
+{
+    float fuzz=0.025;
+    float dist;
+    float inDisk;
+
+    Cout=Cin;
+
+    point PP=transform("object",P);
+    if ((distance(PP,(0,0,0)) < mindistance) || (distance(PP,(0,0,0))> maxdistance))
+    {
+        Cout = blue;
+        alpha = 0;
+    } 
+    else
+    {
+        dist=sqrt((u-0.5)*(u-0.5)+(v-0.2)*(v-0.2));
+        inDisk=smoothstep(0.35-fuzz,0.35+fuzz,dist);
+        Cout=mix(white,blue,inDisk);
+        if (inDisk > 0)
+        {
+            alpha = 0;
+        }
+        else
+        {
+            alpha = 1;
+        }
+    }
+
+}

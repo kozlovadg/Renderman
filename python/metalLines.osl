@@ -5,17 +5,10 @@ surface metalLines (
 output float resultRound=0,
 output float resultStripes=0,
 	)
-
 {
-    color lightWood=color("rgb",1,0.6,0.5);
-    color darkWood=color("rgb",0.3,0.2,0.2);
-
-    point PP=transform("shader",P)*scale;
-    resultRound=sqrt(PP[0]*PP[0]+PP[1]*PP[1]);
-
-    point PPP=transform("world",P)*scale;
+    point PPP=transform("shader",P)*scale;
     float rot = radians(angle);
-    point d = rotate(PPP, rot, point(0,0,0), point(0,1,0));
+    point d = rotate(PPP, rot, point(0,0,0), point(0,0,1));
     float x = mod(d[0],1);
     for(int i=1; i <= 10; i++)
 	{

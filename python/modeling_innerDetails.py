@@ -13,7 +13,7 @@ def handsWhite(ri):
     ri.Patch("bilinear",{'P':face})
     ri.TransformEnd()
 
-def handsBlue(ri):
+def handsBlue_minute(ri):
     ri.Disk(-0.155,0.0125,360)
 
     face=[-0.9,-0.03,-0.125,
@@ -23,6 +23,7 @@ def handsBlue(ri):
     ri.Disk(-0.125,0.07,360)
     ri.Patch("bilinear",{'P':face})
 
+def handsBlue_hour(ri):
     ri.TransformBegin()
     ri.Rotate(-120, 0,0,1)
     ri.Disk(-0.1,0.07,360)
