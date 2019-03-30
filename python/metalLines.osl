@@ -1,21 +1,25 @@
 surface metalLines (
 	color Cin=1,
-	float scale=1,
-    float angle = -15.0,
-output float resultRound=0,
-output float resultStripes=0,
-	)
-{
-    point PPP=transform("shader",P)*scale;
+    float octave = 8,
+    float amp = 2.1,
+    float angle = 15.0,
+output	color Cout=1,
+output float resultStripes = 0,
+)
+{   
     float rot = radians(angle);
-    point d = rotate(PPP, rot, point(0,0,0), point(0,0,1));
-    float x = mod(d[0],1);
-    for(int i=1; i <= 10; i++)
+    point d=transform("shader",P);
+    point dd = rotate(d, rot, point(0,0,0), point(0,0,1));
+    float mag=0;
+    int i;
+    float f=1;
+    point PP = point(dd[0]*0.1, dd[1]*15, dd[2]);
+    for(i=1;i<octave;i++)
 	{
-        if( x < (float)i/10 )
-            {
-            resultStripes = i % 2;
-            break;
-            }
-    }
+        mag+=abs((float)noise("perlin",3*PP*f))/f;
+		f*=amp;
+	}
+    mag=smoothstep(0,1,mag);
+    resultStripes = mag;
+    Cout=(color)(mag);
 }

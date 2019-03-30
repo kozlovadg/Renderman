@@ -34,11 +34,11 @@ def main(filename,
   ri.Option( 'statistics', {'filename'  : [ 'stats.txt' ] } )
   ri.Option( 'statistics', {'endofframe' : [ 1 ] })
 
-  """
-  ri.DepthOfField(1.0,0.175,3.25)
-  ri.Projection(ri.PERSPECTIVE,{ri.FOV:fov})
-  """
 
+  #ri.DepthOfField(1.0,0.175,3.25)
+  ri.Projection(ri.PERSPECTIVE,{ri.FOV:fov})
+
+  """
   ri.Projection('PxrCamera',{
                 ri.FOV:fov,
                 'float fStop' : [1.0],
@@ -49,8 +49,8 @@ def main(filename,
                 'float radial2' : [-0.035],
                 'float natural' : [0.25],
   })
-
-  ri.Translate(0,0.5,3.2)
+  """
+  ri.Translate(0,0.6,3.2)
   ri.Rotate(-50,1,0,0)
   ri.Rotate(40,0,1,0)
 
@@ -103,14 +103,26 @@ def main(filename,
     'int maxdiffusedepth' : [1], 
     'int maxspeculardepth' : [8]
   })
+  ri.Pattern('dirt','dirt', 
+  { 
+      'float minus' : [0.3],
+      'float freq' : [5],
+  })
+  ri.Pattern('PxrMix','mix_dirt_glass',
+  {
+    'color color1' : [0.25,0.25,0.25], 
+    'color color2' : [0.175,0.15,0.15], 
+    'reference float mix' : ['dirt:dirtDots'], 
+  })
   ri.Bxdf('PxrSurface', 'glass',{ 
-    'float diffuseGain' : [0],
+    'reference float diffuseGain' : ['dirt:dirtDots'],
+    'color diffuseColor' : [0.15,0.15,0.15],
     'float refractionGain' : [1.0],
     'float reflectionGain' : [1.0],
     'float glassRoughness' : [0.01],
     'float glassIor' : [1.5],
   })
-  #ri.ReadArchive('cylinder.rib')
+  ri.ReadArchive('cylinder.rib')
   ri.AttributeEnd()
 
   # ------------- Metal In -------------
@@ -175,6 +187,15 @@ def main(filename,
     'vector modelDispVector' : [0, 0 ,0],
     'string __materialid' : ["blue_numbers_displace"]
   })
+  ri.Pattern('radialMetalLines','radialMetalLines', 
+  { 
+  })
+  ri.Pattern('PxrMix','radialMetalLines_mix_roughness',
+  {
+    'color color1' : [0.5,0.0,0.0], 
+    'color color2' : [0.3,0.0,0.0], 
+    'reference float mix' : ['radialMetalLines:resultStripes'], 
+  })
   ri.Bxdf('PxrSurface', 'metal_in', {
           'reference color diffuseColor' : ['mix_blue_numbers:resultRGB'], 
           'reference float diffuseGain' : ['clockface:Calpha'],
@@ -182,7 +203,7 @@ def main(filename,
           'reference color specularEdgeColor' : ['mix_blue_numbers_EdgeColor:resultRGB'],
           'reference color specularIor' : ['mix_blue_numbers_ior:resultRGB'],
           'color specularExtinctionCoeff' : [3.9996, 3.9996, 3.9996],
-          'float specularRoughness' : [0.4], 
+          'reference float specularRoughness' : ['radialMetalLines_mix_roughness:resultR'], 
           'integer specularModelType' : [1] ,
           'string __materialid' : ['metal_in']
   })
@@ -258,30 +279,30 @@ def main(filename,
   })
   ri.Pattern('metalLines','metalLines', 
   { 
-    'float angle' : [110.0],
-    'float scale' : [20.0],
-  })
-  ri.Pattern('PxrVoronoise','voronoi_noise',
-  {
-    'float frequency' : [20.0],  
   })
   ri.Pattern('PxrMix','mix_stripes_roughness',
   {
-    'reference color color1' : ['voronoi_noise:resultRGB'], 
+    'color color1' : [0.1, 0.0,0.0], 
     'color color2' : [0.311376,0.0,0.0], 
     'reference float mix' : ['metalLines:resultStripes'], 
   })
   ri.Pattern('PxrMix','mix_stripes_spec',
   {
-    'reference color color1' : ['voronoi_noise:resultRGB'], 
+    'color color1' : [0.7,0.0,0.0], 
     'color color2' : [0.5,0.0,0.0], 
+    'reference float mix' : ['metalLines:resultStripes'], 
+  })
+  ri.Pattern('PxrMix','mix_stripes_metalness',
+  {
+    'color color1' : [0.1,0.0,0.0], 
+    'color color2' : [0.3,0.0,0.0], 
     'reference float mix' : ['metalLines:resultStripes'], 
   })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
   ri.Bxdf('PxrDisney', 'white_metal_in',{ 
     'reference color baseColor' : ['mix_black_numbers:resultRGB'],
     'reference float specular' : ['mix_stripes_spec:resultR'],
-    'reference float metallic' : ['metalLines:resultStripes'],
+    'reference float metallic' : ['mix_stripes_metalness:resultR'],
     'reference float roughness' : ['mix_stripes_roughness:resultR'],
     'float anisotropic' : [0.6] 
   })
@@ -334,15 +355,49 @@ def main(filename,
 
   ## -------------- Ordinary Metal Out ------------
   ri.AttributeBegin()
+  ri.Attribute ('displacementbound', {'float sphere' : [0.2], 'string coordinatesystem' : ['shader']})
   ri.Attribute( 'user' , {'string __materialid' : ['metal'] })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
+  ri.Pattern('scratches','scratches', 
+  { 
+  })
+  ri.Pattern('PxrMix','mix_scratches_roughness',
+  {
+    'color color1' : [0.01,0.0,0.0], 
+    'color color2' : [0.2,0.0,0.0], 
+    'reference float mix' : ['scratches:resultStripes'], 
+  })
+  ri.Pattern('PxrMix','mix_scratches_anisotropic',
+  {
+    'color color1' : [0.0,0.0,0.0], 
+    'color color2' : [0.6,0.0,0.0], 
+    'reference float mix' : ['scratches:resultStripes'], 
+  })
+  ri.Displace( 'PxrDisplace' ,'displacement' ,
+  {
+    'int enabled' : [1],
+    'float dispAmount' : [-0.00025],
+    'reference float dispScalar' : ['scratches:resultStripes'] ,
+    'vector dispVector' : [0, 0 ,0],
+    'vector modelDispVector' : [0, 0 ,0],
+    'string __materialid' : ["netal_out_displace"]
+  })
+  ri.Pattern('dirt','dirt', 
+  { 
+  })
+  ri.Pattern('PxrMix','mix_dirt',
+  {
+    'color color1' : [0.25,0.25,0.25], 
+    'color color2' : [0.175,0.15,0.15], 
+    'reference float mix' : ['dirt:dirtDots'], 
+  })
   ri.Bxdf('PxrDisney','metal',
   {
-    'color baseColor' : [.25,.25,.25], 
+    'reference color baseColor' : ['mix_dirt:resultRGB'], 
     'float metallic' : [0.9], 
     'float specular' : [0.9], 
-    'float roughness' : [0.2], 
-    'float anisotropic' : [0.6], 
+    'reference float roughness' : ['mix_scratches_roughness:resultR'], 
+    'reference float anisotropic' : ['mix_scratches_anisotropic:resultR'], 
     'string __materialid' : ['metal']
   })
   m_oD.outOrdinaryMetalDetails(ri, widthSmall, widthBig, hight)
@@ -369,7 +424,13 @@ if __name__ == '__main__':
   checkAndCompileShader(shaderName)
   shaderName='metalLines'
   checkAndCompileShader(shaderName)
+  shaderName='radialMetalLines'
+  checkAndCompileShader(shaderName)
   shaderName='rectangle'
+  checkAndCompileShader(shaderName)
+  shaderName='scratches'
+  checkAndCompileShader(shaderName)
+  shaderName='dirt'
   checkAndCompileShader(shaderName)
   cl.ProcessCommandLine('testScenes.rib')
   main(cl.filename,

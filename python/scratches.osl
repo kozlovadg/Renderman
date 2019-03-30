@@ -1,0 +1,46 @@
+surface scratches (
+	color Cin=1,
+    float octave = 8,
+    float amp = 2.1,
+    float angle = -25.0,
+output	color Cout=1,
+output float resultStripes = 0,
+)
+{   
+    float rot = radians(angle);
+    point d=transform("shader",P);
+    point dd = rotate(d, rot, point(0,0,0), point(0,0,1));
+    float mag_stripes=0;
+    float mag = 0;
+    int i;
+    float f=1;
+    point PP = point(dd[0]*0.1, dd[1]*15, dd[2]);
+    for(i=1;i<octave;i++)
+	{
+        mag_stripes+=abs((float)noise("perlin",3*PP*f))/f;
+		f*=amp;
+	}
+    
+    float mag_bigNoise=0;
+    f=1;
+    PP = point(dd[0], dd[1], dd[2]);
+    for(i=1;i<octave;i++)
+	{
+        mag+=abs((float)noise("perlin",0.5*PP*f))/f;
+		f*=amp;
+	}
+    mag_bigNoise = max(mag_bigNoise, mag_stripes);
+
+    f=1;
+    PP = point(dd[0], dd[1], dd[2]);
+    for(i=1;i<octave;i++)
+	{
+        mag+=abs((float)noise("perlin",PP*f))/f;
+		f*=amp;
+	}
+    mag = max(mag, mag_bigNoise);
+
+    mag=smoothstep(0,1,mag);
+    resultStripes = clamp(mag, 0, 1);
+    Cout=(color)(mag);
+}

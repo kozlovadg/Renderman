@@ -1,0 +1,14 @@
+surface radialMetalLines (
+	color Cin=1,
+output	color Cout=1,
+output float resultStripes = 0,
+)
+{   
+    point PP=transform("object",P);
+    vector d=normalize(PP);
+    float repeatCount=1000;
+    float s=atan2(d[0],d[1])/(2*M_PI)*repeatCount;
+    float t=acos(d[2]*0.01)/M_PI*repeatCount;
+    resultStripes =  clamp(noise("cell",s,t),0.01,0.8);
+    Cout=(color)resultStripes;
+}
