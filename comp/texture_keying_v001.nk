@@ -2,7 +2,7 @@
 version 9.0 v6
 define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
 <layout version="1.0">
-    <window x="0" y="22" w="1680" h="980" screen="0">
+    <window x="0" y="22" w="1680" h="979" screen="0">
         <splitter orientation="1">
             <split size="40"/>
             <dock id="" hideTitles="1" activePageId="Toolbar.1">
@@ -14,7 +14,7 @@ define_window_layout_xml {<?xml version="1.0" encoding="UTF-8"?>
                 <dock id="" activePageId="Viewer.1">
                     <page id="Viewer.1"/>
                 </dock>
-                <split size="394"/>
+                <split size="393"/>
                 <dock id="" activePageId="DAG.1" focus="true">
                     <page id="DAG.1"/>
                     <page id="Curve Editor.1"/>
@@ -98,9 +98,9 @@ Invert {
  xpos -101
  ypos 242
 }
-set N144690 [stack 0]
-push $N144690
-push $N144690
+set N94840a40 [stack 0]
+push $N94840a40
+push $N94840a40
 Roto {
  inputs 0
  output alpha
@@ -219,7 +219,7 @@ Invert {
  xpos -333
  ypos 351
 }
-set N1cf8f0 [stack 0]
+set N263d5c10 [stack 0]
 Merge2 {
  inputs 2+1
  operation minus
@@ -230,7 +230,7 @@ Merge2 {
  xpos -101
  ypos 351
 }
-push $N1cf8f0
+push $N263d5c10
 Copy {
  inputs 2
  from0 rgba.alpha
@@ -244,14 +244,14 @@ Premult {
  xpos -333
  ypos 476
 }
-set N1e03b0 [stack 0]
+set N95052fb0 [stack 0]
 Invert {
  channels alpha
  name Invert4
  xpos -186
  ypos 472
 }
-set N1e4330 [stack 0]
+set N9505a540 [stack 0]
 RotoPaint {
  output alpha
  curves {{{v x3f99999a}
@@ -12494,7 +12494,7 @@ Grade {
  xpos -186
  ypos 615
 }
-set N94420a10 [stack 0]
+set N965681e0 [stack 0]
 RotoPaint {
  curves {{{v x3f99999a}
   {f 0}
@@ -13275,7 +13275,7 @@ Invert {
  xpos -12
  ypos 744
 }
-push $N1e03b0
+push $N95052fb0
 Dot {
  name Dot1
  xpos -443
@@ -13353,7 +13353,7 @@ Grade {
  xpos 341
  ypos 483
 }
-set N944dd630 [stack 0]
+set N9669b320 [stack 0]
 RotoPaint {
  curves {{{v x3f99999a}
   {f 0}
@@ -18716,7 +18716,7 @@ RotoPaint {
  xpos 460
  ypos 722
 }
-set N9e117910 [stack 0]
+set N95cbfd40 [stack 0]
 Invert {
  channels alpha
  name Invert9
@@ -18728,8 +18728,8 @@ Premult {
  xpos 460
  ypos 809
 }
-push $N9e117910
-push $N944dd630
+push $N95cbfd40
+push $N9669b320
 RotoPaint {
  curves {{{v x3f99999a}
   {f 0}
@@ -23683,7 +23683,7 @@ RotoPaint {
  xpos 341
  ypos 611
 }
-set N9ec29d60 [stack 0]
+set N97a522d0 [stack 0]
 Invert {
  channels alpha
  name Invert8
@@ -23695,8 +23695,8 @@ Premult {
  xpos 341
  ypos 694
 }
-push $N9ec29d60
-push $N1e4330
+push $N97a522d0
+push $N9505a540
 Dot {
  name Dot2
  xpos 231
@@ -31139,14 +31139,14 @@ Write {
  xpos 197
  ypos 1143
 }
-push $N94420a10
+push $N965681e0
 Invert {
  channels alpha
  name Invert5
  xpos -186
  ypos 720
 }
-push $N1e03b0
+push $N95052fb0
 Copy {
  inputs 2
  from0 rgba.alpha
@@ -31393,7 +31393,7 @@ Crop {
  xpos 839
  ypos 448
 }
-set Na1b644b0 [stack 0]
+set N98e5c1b0 [stack 0]
 Keyer {
  operation "luminance key"
  range {0.0327264463 0.1677293503 1 1}
@@ -31597,7 +31597,7 @@ Roto {
  xpos 580
  ypos 651
 }
-set Na1b72bd0 [stack 0]
+set N98e78150 [stack 0]
 Roto {
  inputs 0
  output alpha
@@ -31777,7 +31777,7 @@ Transform {
  xpos 534
  ypos 594
 }
-set Na1bbcdf0 [stack 0]
+set N98f406b0 [stack 0]
 ChannelMerge {
  inputs 2
  name ChannelMerge1
@@ -31789,9 +31789,9 @@ Invert {
  xpos 575
  ypos 796
 }
-push $Na1b72bd0
-push $Na1bbcdf0
-push $Na1b644b0
+push $N98e78150
+push $N98f406b0
+push $N98e5c1b0
 Keyer {
  operation "luminance key"
  range {0 0.02051084569 0.12197293 0.7733390571}
@@ -88254,10 +88254,51 @@ Write {
 }
 Viewer {
  inputs 2
+ frame 1
  frame_range 1-100
  colour_sample_bbox {-0.4535423815 0.0177119635 -0.4529616833 0.01829268225}
  translate {-1.161999941 -0.09000000358}
  name Viewer1
  xpos -40
  ypos -9
+}
+Read {
+ inputs 0
+ file /Users/daria/Documents/gitHub/Renderman/textures/woodTexture_original.jpg
+ format "4000 2667 0 0 4000 2667 1 "
+ origset true
+ version 1
+ name Read5
+ xpos 1170
+ ypos 473
+}
+Crop {
+ box {0 0 600 600}
+ reformat true
+ crop false
+ name Crop11
+ xpos 1170
+ ypos 553
+}
+Keyer {
+ operation "luminance key"
+ range {0 0.7733390571 1 1}
+ name Keyer6
+ xpos 1170
+ ypos 584
+}
+Invert {
+ channels alpha
+ name Invert13
+ xpos 1170
+ ypos 616
+}
+Write {
+ channels rgba
+ file /Users/daria/Documents/gitHub/Renderman/textures/woodTexture.exr
+ file_type exr
+ version 1
+ name Write5
+ xpos 1170
+ ypos 648
 }
