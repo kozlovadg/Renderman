@@ -34,17 +34,20 @@ def main(filename,
   ri.DisplayChannel("color albedo", {"string source" : ["color lpe:nothruput;noinfinitecheck;noclamp;unoccluded;overwrite;C<.S'passthru'>*((U2L)|O)"]})
   ri.DisplayChannel("color refraction", {"string source" : ["color lpe:(C<T[S]>[DS]+<L.>)|(C<T[S]>[DS]*O)"]})
 
-  ri.Display('watches.THETA.exr', 'file', 'rgba')
-  ri.Display('+watches_DirectDiffuse.THETA.exr', 'file', 'directDiffuse')
-  ri.Display('+watches_DirectSpecular.THETA.exr', 'file', 'directSpecular')
-  ri.Display('+watches___depth.THETA.exr', 'file', '__depth')
-  ri.Display('+watches_indirectDiffuse.THETA.exr', 'file', 'indirectDiffuse')
-  ri.Display('+watches_indirectSpecular.THETA.exr', 'file', 'indirectSpecular')
-  ri.Display('+watches_albedo.THETA.exr', 'file', 'albedo')
-  ri.Display('+watches_refraction.THETA.exr', 'file', 'refraction')
+  ri.Display('/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches.THETA.exr', 'openexr', 'Ci,a')
+  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_DirectDiffuse.THETA.exr', 'openexr', 'directDiffuse')
+  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_DirectSpecular.THETA.exr', 'openexr', 'directSpecular')
+  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches___depth.THETA.exr', 'openexr', '__depth')
+  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_indirectDiffuse.THETA.exr', 'openexr', 'indirectDiffuse')
+  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_indirectSpecular.THETA.exr', 'openexr', 'indirectSpecular')
+  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_albedo.THETA.exr', 'openexr', 'albedo')
+  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_refraction.THETA.exr', 'openexr', 'refraction')
   ri.Format(2048,872,1)
 
-  ri.Hider('raytrace' ,{'int incremental' :[1]})
+  ri.Hider('raytrace' ,{
+    'int incremental' :[1],
+    "int maxsamples" : [512],  
+  })
   ri.ShadingRate(shadingrate)
   ri.PixelVariance (pixelvar)
   ri.Integrator (integrator ,'integrator',integratorParams)
