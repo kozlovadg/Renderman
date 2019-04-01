@@ -8,7 +8,7 @@ import modeling_outDetails as m_oD
 
 def main(filename,
         shadingrate=10,
-        pixelvar=0.1,
+        pixelvar=0.01,
         fov=45.0,
         width=1024,
         height=720,
@@ -45,8 +45,7 @@ def main(filename,
   ri.Format(2048,1548,1)
 
   ri.Hider('raytrace' ,{
-    'int incremental' :[1],
-    "int maxsamples" : [512],  
+    'int incremental' :[1], 
   })
   ri.ShadingRate(shadingrate)
   ri.PixelVariance (pixelvar)
@@ -114,7 +113,7 @@ def main(filename,
   ri.Pattern('PxrMix','mix_colour',
   {
     'color color1' : [0.6,0.6,0.6], 
-    'color color2' : [0.4,0.4,0.4], 
+    'color color2' : [0.45,0.45,0.45], 
     'reference float mix' : ['PxrTexture1:resultA'], 
   })
   ri.Pattern('PxrMix','mix_colour_dirt',
@@ -138,7 +137,7 @@ def main(filename,
   ri.Displace( 'PxrDisplace' ,'displacement' ,
   {
     'int enabled' : [1],
-    'float dispAmount' : [0.005],
+    'float dispAmount' : [0.001],
     'reference float dispScalar' : ['PxrTexture1:resultA'] ,
     'vector dispVector' : [0, 0 ,0],
     'vector modelDispVector' : [0, 0 ,0],
