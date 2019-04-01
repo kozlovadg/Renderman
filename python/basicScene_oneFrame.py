@@ -34,14 +34,14 @@ def main(filename,
   ri.DisplayChannel("color albedo", {"string source" : ["color lpe:nothruput;noinfinitecheck;noclamp;unoccluded;overwrite;C<.S'passthru'>*((U2L)|O)"]})
   ri.DisplayChannel("color refraction", {"string source" : ["color lpe:(C<T[S]>[DS]+<L.>)|(C<T[S]>[DS]*O)"]})
 
-  ri.Display('watches.exr', 'it', 'rgba')
-  ri.Display('+watches_DirectDiffuse.exr', 'it', 'directDiffuse')
-  ri.Display('+watches_DirectSpecular.exr', 'it', 'directSpecular')
-  ri.Display('+watches___depth.exr', 'it', '__depth')
-  ri.Display('+watches_indirectDiffuse.exr', 'it', 'indirectDiffuse')
-  ri.Display('+watches_indirectSpecular.exr', 'it', 'indirectSpecular')
-  ri.Display('+watches_albedo.exr', 'it', 'albedo')
-  ri.Display('+watches_refraction.exr', 'it', 'refraction')
+  ri.Display('watches_oneFrame.exr', 'file', 'rgba')
+  ri.Display('+watches_DirectDiffuse_oneFrame.exr', 'file', 'directDiffuse')
+  ri.Display('+watches_DirectSpecular_oneFrame.exr', 'file', 'directSpecular')
+  ri.Display('+watches___depth_oneFrame.exr', 'file', '__depth')
+  ri.Display('+watches_indirectDiffuse_oneFrame.exr', 'file', 'indirectDiffuse')
+  ri.Display('+watches_indirectSpecular_oneFrame.exr', 'file', 'indirectSpecular')
+  ri.Display('+watches_albedo_oneFrame.exr', 'file', 'albedo')
+  ri.Display('+watches_refraction_oneFrame.exr', 'file', 'refraction')
   ri.Format(2048,1548,1)
 
   ri.Hider('raytrace' ,{'int incremental' :[1]})
@@ -407,8 +407,8 @@ def main(filename,
 
   ## -------------- Blue Metal Out ------------
   ri.AttributeBegin()
-  ri.Bxdf('PxrDiffuse', 'smooth', { 
-          'color diffuseColor' : [0.001147,0.06711,0.516743]
+  ri.Bxdf('PxrDisney', 'smooth', { 
+          'color baseColor' : [0.000147,0.05711,0.216743]
   }) 
   m_oD.outBlueMetalDetails(ri)
   ri.AttributeEnd()

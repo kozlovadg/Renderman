@@ -408,9 +408,9 @@ def main(filename,
 
   ## -------------- Blue Metal Out ------------
   ri.AttributeBegin()
-  ri.Bxdf('PxrDiffuse', 'smooth', { 
-          'color diffuseColor' : [0.001147,0.06711,0.516743]
-  }) 
+  ri.Bxdf('PxrDisney', 'smooth', { 
+          'color baseColor' : [0.000147,0.05711,0.216743]
+  })  
   m_oD.outBlueMetalDetails(ri)
   ri.AttributeEnd()
 
