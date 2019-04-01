@@ -119,7 +119,7 @@ def main(filename,
   })
   ri.Pattern('PxrMix','mix_colour_dirt',
   {
-    'color color2' : [0.425,0.415,0.415], 
+    'color color2' : [0.5,0.5,0.5], 
     'reference color color1' : ['mix_colour:resultRGB'], 
     'reference float mix' : ['PxrTexture2:resultA'], 
   })

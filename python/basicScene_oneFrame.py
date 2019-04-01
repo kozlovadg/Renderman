@@ -48,7 +48,7 @@ def main(filename,
     'int incremental' :[1], 
   })
   ri.ShadingRate(shadingrate)
-  ri.PixelVariance (0.01)
+  ri.PixelVariance (0.005)
   ri.Integrator (integrator ,'integrator',integratorParams)
   ri.Option( 'statistics', {'filename'  : [ 'stats.txt' ] } )
   ri.Option( 'statistics', {'endofframe' : [ 1 ] })
