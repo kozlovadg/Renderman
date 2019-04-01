@@ -17,7 +17,7 @@ def ProcessCommandLine(_filename) :
                       help='modify the shading rate default to 10')
 
   parser.add_argument('--pixelvar', '-p' ,nargs='?', 
-                      const=0.01, default=0.01,type=float,
+                      const=0.05, default=0.05,type=float,
                       help='modify the pixel variance default  0.01')
   parser.add_argument('--fov', '-f' ,nargs='?', 
                       const=48.0, default=48.0,type=float,

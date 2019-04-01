@@ -21,7 +21,7 @@ output	float dirtDots=1,
         mag_bigNoise+=abs((float)noise("perlin",freq*PP*f))/f;
 		f*=amp;
 	}
-    float mag = min(mag_bigNoise, clamp(dotProduct+1.5,0,1));
+    float mag = min(mag_bigNoise, clamp(dotProduct,0,1));
     dirtDots = clamp(mag - minus, 0,1);
     Cout = (color)(mag);
 }

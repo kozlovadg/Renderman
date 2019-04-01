@@ -15,7 +15,7 @@ def main(filename,
         integrator='PxrPathTracer',
         integratorParams={}
         ) :
-  print ('shading rate {} pivel variance {} using {} {}'.format(shadingrate,pixelvar,integrator,integratorParams))
+  print ('shading rate {} pivel variance {} using {} {}'.format(shadingrate,0.01,integrator,integratorParams))
     
   ri = prman.Ri() # create an instance of the RenderMan interface
 
@@ -48,7 +48,7 @@ def main(filename,
     'int incremental' :[1], 
   })
   ri.ShadingRate(shadingrate)
-  ri.PixelVariance (pixelvar)
+  ri.PixelVariance (0.01)
   ri.Integrator (integrator ,'integrator',integratorParams)
   ri.Option( 'statistics', {'filename'  : [ 'stats.txt' ] } )
   ri.Option( 'statistics', {'endofframe' : [ 1 ] })
@@ -61,7 +61,7 @@ def main(filename,
                 'float fStop' : [1.0],
                 'float focalLength' : [0.12],
                 'float focalDistance' : [3.25],
-                'color transverse' : [1,1.0015, 1.002], 
+                'color transverse' : [1,1.0005, 1.001], 
                 'float natural' : [0.25],
   })
   
