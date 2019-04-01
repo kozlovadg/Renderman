@@ -170,6 +170,7 @@ def main(filename,
   { 
       'float minus' : [0.3],
       'float freq' : [5],
+      'float add' : [1.5],
   })
   ri.Pattern('PxrMix','mix_dirt_glass',
   {

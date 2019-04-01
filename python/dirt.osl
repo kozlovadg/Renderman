@@ -2,6 +2,7 @@ surface dirt (
 	color Cin=1,
     float minus = 0,
     float freq = 10,
+    float add = 0,
 output	color Cout=1,
 output	float dirtDots=1,
 )
@@ -21,7 +22,7 @@ output	float dirtDots=1,
         mag_bigNoise+=abs((float)noise("perlin",freq*PP*f))/f;
 		f*=amp;
 	}
-    float mag = min(mag_bigNoise, clamp(dotProduct,0,1));
+    float mag = min(mag_bigNoise, clamp(dotProduct+add,0,1));
     dirtDots = clamp(mag - minus, 0,1);
     Cout = (color)(mag);
 }
