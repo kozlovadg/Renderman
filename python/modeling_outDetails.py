@@ -13,7 +13,7 @@ def outOrdinaryMetalDetails(ri, widthSmall, widthBig, hight):
     ri.Hyperboloid([widthSmall,0.0,-0.1], [widthBig,0.0,-0.05],360)
     ri.Translate(0.0, 0.0, hight/2-0.05)
     ri.Hyperboloid([widthBig,0.0,-hight/2], [widthBig,0.0,-0.2],360)
-    ri.Hyperboloid([ widthBig,0.0,-0.2],[widthBig + 0.05,0.0,-0.2],360)
+    #ri.Hyperboloid([ widthBig,0.0,-0.2],[widthBig + 0.05,0.0,-0.2],360)
     ri.Hyperboloid([ widthBig + 0.05,0.0,-0.2],[widthBig + 0.05,0.0,-0.225],360)
 
     # Side details near mechanism

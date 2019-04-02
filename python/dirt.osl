@@ -1,29 +1,21 @@
 surface dirt (
 	color Cin=1,
-    float minus = 0,
-    float freq = 10,
-    float add = 0,
 output	color Cout=1,
 output	float dirtDots=1,
 )
 {
-    normal d=transform("shader",N);
-    vector up = (0,0,1);
-    float dotProduct = dot((vector)d, up);
-
-    point dd=transform("shader",P);
-    float mag_bigNoise=0;
-    float f=1;
+    point PP=transform("shader",P);
+    float mag=0;
+    float freq = 10;
+    float f=0.75;
     float amp = 4;
     float octave = 4;
-    point PP = point(dd[0], dd[1], dd[2]);
     for(int i=1;i<octave;i++)
 	{
-        mag_bigNoise+=abs((float)noise("perlin",freq*PP*f))/f;
+        mag+=abs((float)noise("simplex",freq*PP*f))/f;
 		f*=amp;
 	}
-    float mag = min(mag_bigNoise, clamp(dotProduct+add,0,1));
-    dirtDots = clamp(mag - minus, 0,1);
+    dirtDots = clamp(mag, 0,1);
     Cout = (color)(mag);
 }
 

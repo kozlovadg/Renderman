@@ -1,0 +1,8 @@
+THETA=1
+while [ $THETA -le 721 ]
+do
+echo $THETA
+NEXT=`expr $THETA + 5`
+cat basicScene_turnTable_occlusion.py | sed s/THETA/$THETA/g | sed s/NEXT/$NEXT/g | python
+THETA=$NEXT
+done

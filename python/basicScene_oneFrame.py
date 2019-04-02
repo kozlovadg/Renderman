@@ -8,7 +8,7 @@ import modeling_outDetails as m_oD
 
 def main(filename,
         shadingrate=10,
-        pixelvar=0.01,
+        pixelvar=0.001,
         fov=45.0,
         width=1024,
         height=720,
@@ -46,14 +46,14 @@ def main(filename,
 
   ri.Hider('raytrace' ,{
     'int incremental' :[1], 
+    'int maxsamples' : [1024],
   })
   ri.ShadingRate(shadingrate)
-  ri.PixelVariance (0.005)
+  ri.PixelVariance (0.001)
   ri.Integrator (integrator ,'integrator',integratorParams)
   ri.Option( 'statistics', {'filename'  : [ 'stats.txt' ] } )
   ri.Option( 'statistics', {'endofframe' : [ 1 ] })
 
-  #ri.DepthOfField(1.0,0.12,3.25)
   #ri.Projection(ri.PERSPECTIVE,{ri.FOV:fov})
 
   ri.Projection('PxrCamera',{
@@ -165,26 +165,28 @@ def main(filename,
     'int maxdiffusedepth' : [1], 
     'int maxspeculardepth' : [8]
   })
-  ri.Pattern('dirt','dirt', 
-  { 
-      'float minus' : [0.3],
-      'float freq' : [5],
-      'float add' : [1.5],
+  ri.Pattern ("PxrTexture", "PxrTexture_glassdirt", {
+    "string filename" : ["smudges.tx"],
   })
   ri.Pattern('PxrMix','mix_dirt_glass',
   {
-    'color color1' : [0.25,0.25,0.25], 
-    'color color2' : [0.175,0.15,0.15], 
-    'reference float mix' : ['dirt:dirtDots'], 
+    'color color1' : [0.25,0,0], 
+    'color color2' : [0,0,0], 
+    'reference float mix' : ['PxrTexture_glassdirt:resultA'], 
   })
   ri.Bxdf('PxrSurface', 'glass',{ 
-    'reference float diffuseGain' : ['dirt:dirtDots'],
+    'reference float diffuseGain' : ['mix_dirt_glass:resultR'],
     'color diffuseColor' : [0.15,0.15,0.15],
     'float refractionGain' : [1.0],
     'float reflectionGain' : [1.0],
     'float glassRoughness' : [0.01],
     'float glassIor' : [1.5],
   })
+  """
+  ri.Bxdf("PxrDisney","PxrDisney3", {
+    "reference color baseColor" : ["mix_dirt_glass:resultRGB"], 
+  })
+  """
   ri.ReadArchive('cylinder.rib')
   ri.AttributeEnd()
 
@@ -445,25 +447,83 @@ def main(filename,
     'vector modelDispVector' : [0, 0 ,0],
     'string __materialid' : ["netal_out_displace"]
   })
-  ri.Pattern('dirt','dirt', 
-  { 
-  })
-  ri.Pattern('PxrMix','mix_dirt',
+  ri.Pattern("PxrDirt", "PxrDirt1",
   {
-    'color color1' : [0.25,0.25,0.25], 
-    'color color2' : [0.175,0.15,0.15], 
-    'reference float mix' : ['dirt:dirtDots'], 
+    "int direction": [2],
+    "int numSamples" : [16], 
+  })
+  ri.Pattern("PxrRemap", "PxrRemap1", 
+  {
+    "reference color inputRGB" : ["PxrDirt1:resultRGB"],
+    "float inputMin" : [0.6], 
+    "float inputMax" : [0.7],
+    "float outputMin" : [1], 
+    "float outputMax" : [0],
+  })
+  ri.Pattern('PxrMix','mix_dirt_general',
+  {
+    'color color2' : [0.25,0.25,0.25], 
+    'color color1' : [0.2,0.2,0.2], 
+    'reference float mix' : ['PxrRemap1:resultR'], 
+  })
+  ri.Pattern('PxrMix','mix_dirt_general_metallic',
+  {
+    'color color2' : [0.9,0.0,0.0], 
+    'color color1' : [0.75,0.0,0.0], 
+    'reference float mix' : ['PxrRemap1:resultR'], 
+  })
+  ri.Pattern ("PxrTexture", "Texture_dust", {
+    "string filename" : ["dust.tx"],
+  })
+  ri.Pattern('PxrMix','mix_dirt_general_plus_dust',
+  {
+    'reference color color1' : ['mix_dirt_general:resultRGB'], 
+    'color color2' : [0.175,0.175,0.175], 
+    'reference float mix' : ['Texture_dust:resultR'], 
+  })
+  ri.Pattern('PxrMix','mix_dirt_general_metallic_plus_dust',
+  {
+    'reference color color1' : ['mix_dirt_general_metallic:resultRGB'], 
+    'color color2' : [0.6,0,0], 
+    'reference float mix' : ['Texture_dust:resultR'], 
   })
   ri.Bxdf('PxrDisney','metal',
   {
-    'reference color baseColor' : ['mix_dirt:resultRGB'], 
-    'float metallic' : [0.9], 
+    'reference color baseColor' : ['mix_dirt_general_plus_dust:resultRGB'], 
+    'reference float metallic' : ['mix_dirt_general_metallic_plus_dust:resultR'], 
     'float specular' : [0.9], 
     'reference float roughness' : ['mix_scratches_roughness:resultR'], 
     'reference float anisotropic' : ['mix_scratches_anisotropic:resultR'], 
     'string __materialid' : ['metal']
   })
   m_oD.outOrdinaryMetalDetails(ri, widthSmall, widthBig, hight)
+  ri.AttributeEnd()
+  ri.AttributeBegin()
+  ri.Translate(0.0, 0.0, hight/2-0.05)
+  ri.Pattern('dirt','dirt', 
+  { 
+  })
+  ri.Pattern('PxrMix','mix_dirt_roughness',
+  {
+    'color color1' : [0.4,0.0,0.0], 
+    'color color2' : [0.7,0.0,0.0], 
+    'reference float mix' : ['dirt:dirtDots'], 
+  })
+  ri.Pattern('PxrMix','mix_dirt',
+  {
+    'color color1' : [0.25,0.25,0.25], 
+    'color color2' : [0.225,0.21,0.21], 
+    'reference float mix' : ['dirt:dirtDots'], 
+  })
+  ri.Bxdf('PxrDisney','metal_dirt',
+  {
+    'reference color baseColor' : ['mix_dirt:resultRGB'], 
+    'float metallic' : [0.9], 
+    'float specular' : [0.9], 
+    'reference float roughness' : ['mix_dirt_roughness:resultR'], 
+    'string __materialid' : ['metal_dirt']
+  })
+  ri.Hyperboloid([ widthBig,0.0,-0.2],[widthBig + 0.05,0.0,-0.2],360)
   ri.AttributeEnd()
   ri.TransformEnd()
 
