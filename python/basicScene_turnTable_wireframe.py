@@ -2,6 +2,8 @@ from __future__ import print_function
 import sys,os.path,subprocess
 import prman
 
+sys.path.insert(0, '../modeling')
+
 import ProcessCommandLine as cl
 import modeling_innerDetails as m_iD
 import modeling_outDetails as m_oD

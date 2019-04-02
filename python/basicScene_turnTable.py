@@ -2,6 +2,8 @@ from __future__ import print_function
 import sys,os.path,subprocess
 import prman
 
+sys.path.insert(0, '../modeling')
+
 import ProcessCommandLine as cl
 import modeling_innerDetails as m_iD
 import modeling_outDetails as m_oD
@@ -34,14 +36,8 @@ def main(filename,
   ri.DisplayChannel("color albedo", {"string source" : ["color lpe:nothruput;noinfinitecheck;noclamp;unoccluded;overwrite;C<.S'passthru'>*((U2L)|O)"]})
   ri.DisplayChannel("color refraction", {"string source" : ["color lpe:(C<T[S]>[DS]+<L.>)|(C<T[S]>[DS]*O)"]})
 
-  ri.Display('/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches.THETA.exr', 'openexr', 'Ci,a')
-  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_DirectDiffuse.THETA.exr', 'openexr', 'directDiffuse')
-  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_DirectSpecular.THETA.exr', 'openexr', 'directSpecular')
-  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches___depth.THETA.exr', 'openexr', '__depth')
-  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_indirectDiffuse.THETA.exr', 'openexr', 'indirectDiffuse')
-  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_indirectSpecular.THETA.exr', 'openexr', 'indirectSpecular')
-  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_albedo.THETA.exr', 'openexr', 'albedo')
-  ri.Display('+/home/s5101972/Desktop/RENDERING/Renderman/turntable/watches_refraction.THETA.exr', 'openexr', 'refraction')
+  ri.Display('../turntable/watches.THETA.exr', 'openexr', 'Ci,a,directDiffuse,directSpecular,__depth,indirectDiffuse,indirectSpecular,albedo,refraction')
+  
   ri.Format(2048,872,1)
 
   ri.Hider('raytrace' ,{
