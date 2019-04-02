@@ -196,7 +196,7 @@ def main(filename,
     'color color2' : [0,0,0], 
     'reference float mix' : ['PxrTexture_glassdirt:resultA'], 
   })
-  ri.Bxdf('PxrSurface', 'glass',
+  ri.Bxdf('PxrSurface', 'PxrSurface_glass',
   { 
     'reference float diffuseGain' : ['mix_dirt_glass:resultR'],
     'color diffuseColor' : [0.15,0.15,0.15],
@@ -262,7 +262,7 @@ def main(filename,
     'color color2' : [0.05,0.0,0.0], 
     'reference float mix' : ['nine:Calpha'], 
   })
-  ri.Displace( 'PxrDisplace' ,'displacement' ,
+  ri.Displace( 'PxrDisplace' ,'blue_numbers_displacement' ,
   {
     'int enabled' : [1],
     'reference float dispAmount' : ['displace_numbers_nine:resultR'],
@@ -280,7 +280,7 @@ def main(filename,
     'color color2' : [0.3,0.0,0.0], 
     'reference float mix' : ['radialMetalLines:resultStripes'], 
   })
-  ri.Bxdf('PxrSurface', 'metal_in', {
+  ri.Bxdf('PxrSurface', 'PxrSurface_metal_in', {
           'reference color diffuseColor' : ['mix_blue_numbers:resultRGB'], 
           'reference float diffuseGain' : ['clockface:Calpha'],
           'int specularFresnelMode' : [1],
@@ -304,18 +304,20 @@ def main(filename,
   { 
       'color blue' : [0.000147,0.05711,0.216743],
   })
-  ri.Displace( 'PxrDisplace' ,'displacement' ,
+  ri.Displace( 'PxrDisplace' ,'Displacement_minute_hands' ,
   {
     'int enabled' : [1],
     'float dispAmount' : [-0.01],
     'reference float dispScalar' : ['rectangle:alpha'] ,
     'vector dispVector' : [0, 0 ,0],
     'vector modelDispVector' : [0, 0 ,0],
-    'string __materialid' : ["hands_minute_displace"]
+    'string __materialid' : ["displace_minute_hands"]
   })
-  ri.Bxdf('PxrDisney', 'smooth', { 
+  ri.Bxdf('PxrDisney', 'PxrDisney_minute_hands', 
+  { 
           'reference color baseColor' : ['rectangle:Cout'],
-          'float metallic' :  [0.2] 
+          'float metallic' :  [0.2],
+          'string __materialid' : ['material_minute_hands']
   })
   m_iD.handsBlue_minute(ri)
   ri.AttributeEnd()
@@ -327,18 +329,19 @@ def main(filename,
         'float mindistance' : [0.45],
         'float maxdistance' : [0.64],
   })
-  ri.Displace( 'PxrDisplace' ,'displacement' ,
+  ri.Displace( 'PxrDisplace' ,'Displacement_hour_hands' ,
   {
     'int enabled' : [1],
     'float dispAmount' : [-0.01],
     'reference float dispScalar' : ['rectangle:alpha'] ,
     'vector dispVector' : [0, 0 ,0],
     'vector modelDispVector' : [0, 0 ,0],
-    'string __materialid' : ["hands_hours_displace"]
+    'string __materialid' : ["displace_hour_hands"]
   })
-  ri.Bxdf('PxrDisney', 'smooth', { 
+  ri.Bxdf('PxrDisney', 'PxrDisney_hour_hands', { 
           'reference color baseColor' : ['rectangle:Cout'],
-          'float metallic' :  [0.2] 
+          'float metallic' :  [0.2],
+          'string __materialid' : ['material_hour_hands']
   })
   m_iD.handsBlue_hour(ri)
   ri.AttributeEnd()
@@ -383,12 +386,13 @@ def main(filename,
     'reference float mix' : ['metalLines:resultStripes'], 
   })
   ri.Attribute( 'Ri', {'int Sides' : [2] })
-  ri.Bxdf('PxrDisney', 'white_metal_in',{ 
+  ri.Bxdf('PxrDisney', 'PxrDisney_white_metal_in',{ 
     'reference color baseColor' : ['mix_black_numbers:resultRGB'],
     'reference float specular' : ['mix_stripes_spec:resultR'],
     'reference float metallic' : ['mix_stripes_metalness:resultR'],
     'reference float roughness' : ['mix_stripes_roughness:resultR'],
-    'float anisotropic' : [0.6] 
+    'float anisotropic' : [0.6],
+    'string __materialid' : ['material_white_metal_in']
   })
   ri.Disk(diskPosition-0.005,widthSmall-0.5,-360)
   ri.AttributeEnd()
@@ -417,11 +421,15 @@ def main(filename,
     'color color2' : [0.9,0.0,0.0], 
     'reference float mix' : ['circle:Calpha'], 
   })
-  ri.Attribute( 'user' , {'string __materialid' : ['metal_in'] })
-  ri.Attribute( 'Ri', {'int Sides' : [2] })
-  ri.Bxdf('PxrDisney', 'plastic', { 
+  ri.Attribute( 'Ri', 
+  {
+    'int Sides' : [2] 
+  })
+  ri.Bxdf('PxrDisney', 'PxrDisney_plastic', 
+  { 
       'reference color baseColor' : ['mix_circle:resultRGB'], 
-      'reference float roughness' : ['mix_circle_roughness:resultR'], 
+      'reference float roughness' : ['mix_circle_roughness:resultR'],
+      'string __materialid' : ['material_plastic'] 
   })
   m_iD.plasticIn(ri, widthSmall, diskPosition)
   ri.TransformEnd()
@@ -431,8 +439,10 @@ def main(filename,
 
   ## -------------- Blue Metal Out ------------
   ri.AttributeBegin()
-  ri.Bxdf('PxrDisney', 'smooth', { 
-          'color baseColor' : [0.000147,0.05711,0.216743]
+  ri.Bxdf('PxrDisney', 'smooth', 
+  { 
+          'color baseColor' : [0.000147,0.05711,0.216743],
+          'string __materialid' : ['material_blue_metal_out'] 
   }) 
   m_oD.outBlueMetalDetails(ri)
   ri.AttributeEnd()
@@ -440,8 +450,10 @@ def main(filename,
   ## -------------- Ordinary Metal Out ------------
   ri.AttributeBegin()
   ri.Attribute ('displacementbound', {'float sphere' : [0.2], 'string coordinatesystem' : ['shader']})
-  ri.Attribute( 'user' , {'string __materialid' : ['metal'] })
-  ri.Attribute( 'Ri', {'int Sides' : [2] })
+  ri.Attribute( 'Ri', 
+  {
+    'int Sides' : [2] 
+  })
   ri.Pattern('scratches','scratches', 
   { 
   })
@@ -457,14 +469,14 @@ def main(filename,
     'color color2' : [0.6,0.0,0.0], 
     'reference float mix' : ['scratches:resultStripes'], 
   })
-  ri.Displace( 'PxrDisplace' ,'displacement' ,
+  ri.Displace( 'PxrDisplace' ,'Displacement_metal_out' ,
   {
     'int enabled' : [1],
     'float dispAmount' : [-0.00025],
     'reference float dispScalar' : ['scratches:resultStripes'] ,
     'vector dispVector' : [0, 0 ,0],
     'vector modelDispVector' : [0, 0 ,0],
-    'string __materialid' : ["netal_out_displace"]
+    'string __materialid' : ["displace_metal_out"]
   })
   ri.Pattern("PxrDirt", "PxrDirt1",
   {
@@ -491,7 +503,8 @@ def main(filename,
     'color color1' : [0.75,0.0,0.0], 
     'reference float mix' : ['PxrRemap1:resultR'], 
   })
-  ri.Pattern ("PxrTexture", "Texture_dust", {
+  ri.Pattern ("PxrTexture", "Texture_dust", 
+  {
     "string filename" : ["dust.tx"],
   })
   ri.Pattern('PxrMix','mix_dirt_general_plus_dust',
@@ -506,17 +519,18 @@ def main(filename,
     'color color2' : [0.6,0,0], 
     'reference float mix' : ['Texture_dust:resultR'], 
   })
-  ri.Bxdf('PxrDisney','metal',
+  ri.Bxdf('PxrDisney','PxrDisney_metal_out',
   {
     'reference color baseColor' : ['mix_dirt_general_plus_dust:resultRGB'], 
     'reference float metallic' : ['mix_dirt_general_metallic_plus_dust:resultR'], 
     'float specular' : [0.9], 
     'reference float roughness' : ['mix_scratches_roughness:resultR'], 
     'reference float anisotropic' : ['mix_scratches_anisotropic:resultR'], 
-    'string __materialid' : ['metal']
+    'string __materialid' : ['material_metal_out']
   })
   m_oD.outOrdinaryMetalDetails(ri, widthSmall, widthBig, hight)
   ri.AttributeEnd()
+
   ri.AttributeBegin()
   ri.Translate(0.0, 0.0, hight/2-0.05)
   ri.Pattern('dirt','dirt', 
@@ -534,13 +548,13 @@ def main(filename,
     'color color2' : [0.225,0.21,0.21], 
     'reference float mix' : ['dirt:dirtDots'], 
   })
-  ri.Bxdf('PxrDisney','metal_dirt',
+  ri.Bxdf('PxrDisney','PxrDisney_metal_out_dirt',
   {
     'reference color baseColor' : ['mix_dirt:resultRGB'], 
     'float metallic' : [0.9], 
     'float specular' : [0.9], 
     'reference float roughness' : ['mix_dirt_roughness:resultR'], 
-    'string __materialid' : ['metal_dirt']
+    'string __materialid' : ['material_metal_out_dirt']
   })
   ri.Hyperboloid([ widthBig,0.0,-0.2],[widthBig + 0.05,0.0,-0.2],360)
   ri.AttributeEnd()
