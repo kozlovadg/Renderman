@@ -25,6 +25,7 @@ def main(filename,
 
   ri.Option('searchpath', {'string archive':'../assets/:@'})
   ri.Option('searchpath', {'string texture':'../textures/:@'})
+  ri.Option('searchpath', {'string shader':'../shaders/:@'})
 
   ri.DisplayChannel("color Ci", {"string source" : ["Ci"]})
   ri.DisplayChannel("float a", {"string source" : ["a"]})
@@ -36,7 +37,17 @@ def main(filename,
   ri.DisplayChannel("color albedo", {"string source" : ["color lpe:nothruput;noinfinitecheck;noclamp;unoccluded;overwrite;C<.S'passthru'>*((U2L)|O)"]})
   ri.DisplayChannel("color refraction", {"string source" : ["color lpe:(C<T[S]>[DS]+<L.>)|(C<T[S]>[DS]*O)"]})
 
-  ri.Display('../turntable/watches.THETA.exr', 'openexr', 'Ci,a,directDiffuse,directSpecular,__depth,indirectDiffuse,indirectSpecular,albedo,refraction')
+  if INTEGRATOR_TYPE == 0: 
+    integrator = 'PxrPathTracer' 
+    pathToSave = 'turntable'
+  if INTEGRATOR_TYPE == 1: 
+    integrator = 'PxrOcclusion' 
+    pathToSave = 'occlusion'
+  if INTEGRATOR_TYPE == 2: 
+    integrator = 'PxrVisualizer' 
+    pathToSave = 'wireframe'
+
+  ri.Display('../rendering/'+pathToSave+'/watches.THETA.exr', 'openexr', 'Ci,a,directDiffuse,directSpecular,__depth,indirectDiffuse,indirectSpecular,albedo,refraction')
   
   ri.Format(2048,872,1)
 
@@ -46,7 +57,8 @@ def main(filename,
   })
   ri.ShadingRate(shadingrate)
   ri.PixelVariance (pixelvar)
-  ri.Integrator (integrator ,'integrator',integratorParams)
+
+  ri.Integrator (integrator,'integrator',integratorParams)
   ri.Option( 'statistics', {'filename'  : [ 'stats.txt' ] } )
   ri.Option( 'statistics', {'endofframe' : [ 1 ] })
 
@@ -101,71 +113,81 @@ def main(filename,
   # ------------- Plane -------------
   ri.AttributeBegin()
   ri.TransformBegin()
-  ri.Translate(-0.75,0.5,0.4)
-  ri.Scale(2.2,2.2,2.2)
-  ri.Attribute ('displacementbound', {'float sphere' : [0.2], 'string coordinatesystem' : ['shader']})
-  ri.Pattern ("PxrTexture", "PxrTexture1", {
+  ri.Translate(0,0,0.4)
+  ri.Scale(4,4,4)
+  ri.Attribute ('displacementbound', 
+  {
+    'float sphere' : [0.2], 
+    'string coordinatesystem' : ['shader']
+  })
+  ri.Pattern ("PxrTexture", "PxrTexture_wood_plane", 
+  {
     "string filename" : ["woodTexture.tx"],
   })
-  ri.Pattern ("PxrTexture", "PxrTexture2", {
+  ri.Pattern ("PxrTexture", "PxrTexture_dirt_plane", 
+  {
     "string filename" : ["dirt.tx"],
   })
-  ri.Pattern('PxrMix','mix_colour',
+  ri.Pattern('PxrMix','mix_colour_wood_plane',
   {
     'color color1' : [0.6,0.6,0.6], 
     'color color2' : [0.45,0.45,0.45], 
-    'reference float mix' : ['PxrTexture1:resultA'], 
+    'reference float mix' : ['PxrTexture_wood_plane:resultA'], 
   })
-  ri.Pattern('PxrMix','mix_colour_dirt',
+  ri.Pattern('PxrMix','mix_colour_dirt_plane',
   {
     'color color2' : [0.425,0.415,0.415], 
-    'reference color color1' : ['mix_colour:resultRGB'], 
-    'reference float mix' : ['PxrTexture2:resultA'], 
+    'reference color color1' : ['mix_colour_wood_plane:resultRGB'], 
+    'reference float mix' : ['PxrTexture_dirt_plane:resultA'], 
   })
-  ri.Pattern('PxrMix','mix_spec',
+  ri.Pattern('PxrMix','mix_spec_plane',
   {
     'color color1' : [0.3,0.0,0.0], 
     'color color2' : [0.35,0.0,0.0], 
-    'reference float mix' : ['PxrTexture1:resultA'], 
+    'reference float mix' : ['PxrTexture_wood_plane:resultA'], 
   })
-  ri.Pattern('PxrMix','mix_rough',
+  ri.Pattern('PxrMix','mix_rough_plane',
   {
     'color color1' : [0.3,0.0,0.0], 
     'color color2' : [0.6,0.0,0.0], 
-    'reference float mix' : ['PxrTexture1:resultA'], 
+    'reference float mix' : ['PxrTexture_wood_plane:resultA'], 
   })
   ri.Displace( 'PxrDisplace' ,'displacement' ,
   {
     'int enabled' : [1],
     'float dispAmount' : [0.001],
-    'reference float dispScalar' : ['PxrTexture1:resultA'] ,
+    'reference float dispScalar' : ['PxrTexture_wood_plane:resultA'] ,
     'vector dispVector' : [0, 0 ,0],
     'vector modelDispVector' : [0, 0 ,0],
-    'string __materialid' : ["wood_displace"]
+    'string __materialid' : ["displace_wood_plane"]
   })
-  ri.Bxdf("PxrDisney","PxrDisney1", {
-    "reference color baseColor" : ["mix_colour_dirt:resultRGB"],
-    'reference float specular' : ['mix_spec:resultR'],
-    'reference float roughness' : ['mix_rough:resultR'], 
+  ri.Bxdf("PxrDisney","PxrDisney_plane", {
+    "reference color baseColor" : ["mix_colour_dirt_plane:resultRGB"],
+    'reference float specular' : ['mix_spec_plane:resultR'],
+    'reference float roughness' : ['mix_rough_plane:resultR'], 
+    'string __materialid' : ['material_wood_plane']
   })
   face=[1.5,-1.5,0,
-            1.5,1.5,0,
-            -1.5,-1.5,0,
-            -1.5,1.5,0]
+        1.5,1.5,0,
+        -1.5,-1.5,0,
+        -1.5,1.5,0]
   ri.Patch("bilinear",{'P':face})
   ri.TransformEnd()
   ri.AttributeEnd()
 
   # ------------- Glass -------------
   ri.AttributeBegin()
-  ri.Attribute( 'user' , {'string __materialid' : ['glass'] })
-  ri.Attribute( 'visibility',{ 'int transmission' : [1]})
+  ri.Attribute( 'visibility',
+  { 
+    'int transmission' : [1]
+  })
   ri.Attribute( 'trace',
   { 
     'int maxdiffusedepth' : [1], 
     'int maxspeculardepth' : [8]
   })
-  ri.Pattern ("PxrTexture", "PxrTexture_glassdirt", {
+  ri.Pattern ("PxrTexture", "PxrTexture_glassdirt", 
+  {
     "string filename" : ["smudges.tx"],
   })
   ri.Pattern('PxrMix','mix_dirt_glass',
@@ -174,19 +196,16 @@ def main(filename,
     'color color2' : [0,0,0], 
     'reference float mix' : ['PxrTexture_glassdirt:resultA'], 
   })
-  ri.Bxdf('PxrSurface', 'glass',{ 
+  ri.Bxdf('PxrSurface', 'glass',
+  { 
     'reference float diffuseGain' : ['mix_dirt_glass:resultR'],
     'color diffuseColor' : [0.15,0.15,0.15],
     'float refractionGain' : [1.0],
     'float reflectionGain' : [1.0],
     'float glassRoughness' : [0.01],
     'float glassIor' : [1.5],
+    'string __materialid' : ['material_glass'] 
   })
-  """
-  ri.Bxdf("PxrDisney","PxrDisney3", {
-    "reference color baseColor" : ["mix_dirt_glass:resultRGB"], 
-  })
-  """
   ri.ReadArchive('cylinder.rib')
   ri.AttributeEnd()
 
@@ -535,10 +554,12 @@ def main(filename,
   ri.End()
 
 def checkAndCompileShader(shader) :
-  if os.path.isfile(shader+'.oso') != True  or os.stat(shader+'.osl').st_mtime - os.stat(shader+'.oso').st_mtime > 0 :
+  path = os.path.join(os.pardir, 'shaders')
+  print(path)
+  if os.path.isfile(os.path.join(path, shader+'.oso')) != True  or os.stat(os.path.join(path, shader+'.osl')).st_mtime - os.stat(os.path.join(path, shader+'.oso')).st_mtime > 0 :
     print( 'compiling shader {0}'.format(shader))
     try:
-      subprocess.check_call(['oslc', shader+'.osl'])
+      subprocess.check_call(['oslc', os.path.join(path,shader+'.osl')], cwd=path)
     except subprocess.CalledProcessError :
       sys.exit('shader compilation failed')
 
@@ -556,6 +577,7 @@ if __name__ == '__main__':
   shaderName='dirt'
   checkAndCompileShader(shaderName)
   cl.ProcessCommandLine('testScenes.rib')
+  
   main(cl.filename,
     cl.args.shadingrate,
     cl.args.pixelvar,
@@ -563,3 +585,4 @@ if __name__ == '__main__':
     cl.args.height,
     cl.integrator,
     cl.integratorParams)
+  

@@ -37,7 +37,7 @@ def main(filename,
   ri.DisplayChannel("color albedo", {"string source" : ["color lpe:nothruput;noinfinitecheck;noclamp;unoccluded;overwrite;C<.S'passthru'>*((U2L)|O)"]})
   ri.DisplayChannel("color refraction", {"string source" : ["color lpe:(C<T[S]>[DS]+<L.>)|(C<T[S]>[DS]*O)"]})
 
-  ri.Display('../oneframe/watches.exr', 'openexr', 'Ci,a,directDiffuse,directSpecular,__depth,indirectDiffuse,indirectSpecular,albedo,refraction')
+  ri.Display('../rendering/oneframe/watches.exr', 'openexr', 'Ci,a,directDiffuse,directSpecular,__depth,indirectDiffuse,indirectSpecular,albedo,refraction')
   
   ri.Format(2048,1548,1)
 

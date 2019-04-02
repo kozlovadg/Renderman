@@ -1,8 +1,28 @@
 THETA=1
+INTEGRATOR_TYPE=0
+
+THETA=1
+INTEGRATOR_TYPE=0
+
+while test $# -gt 0; do
+    case "$1" in
+        -t)
+            shift
+            INTEGRATOR_TYPE=$1
+            shift
+            ;;
+        *)
+            return 1;
+            ;;
+    esac 
+done;
+
+echo $INTEGRATOR_TYPE
+
 while [ $THETA -le 721 ]
 do
 echo $THETA
 NEXT=`expr $THETA + 5`
-cat basicScene_turnTable.py | sed s/THETA/$THETA/g | sed s/NEXT/$NEXT/g | python
+cat basicScene_turnTable.py | sed s/INTEGRATOR_TYPE/$INTEGRATOR_TYPE/g | sed s/THETA/$THETA/g | sed s/NEXT/$NEXT/g | python
 THETA=$NEXT
 done
