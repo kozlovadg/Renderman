@@ -39,7 +39,7 @@ def main(filename,
 
   ri.Display('../rendering/oneframe/watches.exr', 'openexr', 'Ci,a,directDiffuse,directSpecular,__depth,indirectDiffuse,indirectSpecular,albedo,refraction')
   
-  ri.Format(2048,1548,1)
+  ri.Format(2048,1080,1)
 
   ri.Hider('raytrace' ,{
     'int incremental' :[1], 
@@ -58,7 +58,7 @@ def main(filename,
                 'float fStop' : [1.0],
                 'float focalLength' : [0.12],
                 'float focalDistance' : [3.25],
-                'color transverse' : [1,1.0005, 1.001], 
+                #'color transverse' : [1,1.0005, 1.001], 
                 'float natural' : [0.25],
   })
   
@@ -98,8 +98,8 @@ def main(filename,
   # ------------- Plane -------------
   ri.AttributeBegin()
   ri.TransformBegin()
-  ri.Translate(-0.75,0.5,0.4)
-  ri.Scale(2.2,2.2,2.2)
+  ri.Translate(-1.3,0.75,0.4)
+  ri.Scale(2.6,2.6,2.6)
   ri.Attribute ('displacementbound', 
   {
     'float sphere' : [0.2], 
