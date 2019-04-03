@@ -2,6 +2,8 @@
 
 The aim of this project was to model believable watches and render it with proper shading and lighting according to reference.
 
+![alt tag](image.jpg)
+
 ## Requirements:
 
 - RenderManProServer 22.0 or above (https://renderman.pixar.com)
